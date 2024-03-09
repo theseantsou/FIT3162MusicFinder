@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".SelectMusicNum">
 
+    <include
+        layout="@layout/background_image_view"
+        android:id="@+id/backgroundLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

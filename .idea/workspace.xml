@@ -20,6 +20,11 @@
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/background_image_view.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -28,7 +33,6 @@
   <component name="ChangeListManager">
     <list default="true" id="213bc9fb-cf9b-49fa-a25e-c53b27c7eaf2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectArtist.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectArtist.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_music_num.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_music_num.xml" afterDir="false" />
     </list>
@@ -60,6 +64,13 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="layoutResourceFile" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
