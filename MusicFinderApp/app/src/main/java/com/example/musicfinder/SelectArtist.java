@@ -102,6 +102,10 @@ public class SelectArtist extends AppCompatActivity {
 
     }
 
+    /**
+     * Function that sets the TextView and EditView based on the page currently on
+     * @param count the page number currently on
+     */
     public void setTextView(int count) {
         TextView textViewTitle = findViewById(R.id.textViewTitle);
         TextView textViewDesc = findViewById(R.id.textViewDesc);
