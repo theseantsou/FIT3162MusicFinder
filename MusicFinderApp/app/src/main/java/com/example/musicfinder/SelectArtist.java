@@ -1,5 +1,6 @@
 package com.example.musicfinder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -71,8 +72,9 @@ public class SelectArtist extends AppCompatActivity {
         count += 1;
 
         if (count == PAGE_NAMES.size()) {
-            // TODO: open the page where prompts user to input amount of songs
-
+            // open the page where prompts user to input amount of songs
+            Intent intent = new Intent(this, SelectMusicNum.class);
+            startActivity(intent);
         }
         else {
             // TODO: store the info on the database or locally to parse to LLM

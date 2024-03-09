@@ -14,9 +14,10 @@
         android:layout_height="match_parent" />
 
     <NumberPicker
+        android:id="@+id/numberPicker"
         android:layout_width="199dp"
         android:layout_height="211dp"
-        
+        android:theme="@style/DefaultNumberPickerTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
