@@ -10,6 +10,16 @@
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_music_num.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -17,15 +27,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="213bc9fb-cf9b-49fa-a25e-c53b27c7eaf2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/FIT3162MusicFinder.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/background.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/get_started_button.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/font/roboto_condensed_reg.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectArtist.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectMusicNum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/back_button.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/linear_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/text_prompt.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_music_num.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_main.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,7 +72,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="yi-yang" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -85,14 +97,21 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/User/Desktop/FIT3162MusicFinder/MusicFinderApp/app/src/main/res/font"
+    "git-widget-placeholder": "yi-yang",
+    "last_opened_file_path": "C:/Users/User/Desktop/FIT3162MusicFinder/MusicFinderApp/app/src/main/res/drawable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\User\Desktop\FIT3162MusicFinder\MusicFinderApp\app\src\main\res\font" />
       <recent name="C:\Users\User\Desktop\FIT3162MusicFinder\MusicFinderApp\app\src\main\res\drawable" />
+      <recent name="C:\Users\User\Desktop\FIT3162MusicFinder\MusicFinderApp\app\src\main\res\layout" />
+      <recent name="C:\Users\User\Desktop\FIT3162MusicFinder\MusicFinderApp\app\src\main\res\font" />
+    </key>
+    <key name="android.template.-1366879552">
+      <recent name="com.example.musicfinder" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.musicfinder" />
     </key>
   </component>
   <component name="RunManager">
