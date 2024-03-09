@@ -7,4 +7,30 @@
     <string name="back_button_desc">Back arrow</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+
+    <string-array name="title_name">
+        <item>Artist</item>
+        <item>Genre</item>
+        <item>Time Period</item>
+        <item>Occasion or\nMood</item>
+        <item>Additional Filters</item>
+    </string-array>
+
+    <string-array name="page_desc">
+        <item>Start your music journey by\nselecting a specific artist or band.</item>
+        <item>It\'s time to define the genre you\'re\ninterested in.</item>
+        <item>Specify the time period you prefer.</item>
+        <item>Customise your playlist for specific\nsituations or emotional states.</item>
+        <item>Additional filters to refine the music\nrecommendations.</item>
+    </string-array>
+
+    <string-array name="page_hint">
+        <item>Enter an artist/band…</item>
+        <item>Enter a genre…</item>
+        <item>Choose a specific decade…</item>
+        <item>Describe the occasion/mood…</item>
+        <item>Filters to apply…</item>
+    </string-array>
+
+
 </resources>
