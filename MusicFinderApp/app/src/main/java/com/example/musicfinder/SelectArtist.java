@@ -72,6 +72,7 @@ public class SelectArtist extends AppCompatActivity {
         count += 1;
 
         if (count == PAGE_NAMES.size()) {
+            count -= 1;
             // open the page where prompts user to input amount of songs
             Intent intent = new Intent(this, SelectMusicNum.class);
             startActivity(intent);

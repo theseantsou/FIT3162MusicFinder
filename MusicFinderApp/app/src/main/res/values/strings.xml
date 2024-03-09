@@ -7,6 +7,8 @@
     <string name="back_button_desc">Back arrow</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+    <string name="song_question">How many songs\nwould you like\nin the playlist?</string>
+    <string name="generate_playlist">Generate Playlist</string>
 
     <string-array name="title_name">
         <item>Artist</item>

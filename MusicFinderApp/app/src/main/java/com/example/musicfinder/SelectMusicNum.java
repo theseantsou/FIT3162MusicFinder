@@ -1,6 +1,7 @@
 package com.example.musicfinder;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.NumberPicker;
 
 import androidx.activity.EdgeToEdge;
@@ -31,5 +32,13 @@ public class SelectMusicNum extends AppCompatActivity {
 
 
 
+    }
+
+    public void openParentPage(View view) {
+        finish();
+    }
+
+    public void openPlaylistPage(View view) {
+        // Todo: have a playlist generation page
     }
 }
