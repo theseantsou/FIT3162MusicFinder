@@ -16,23 +16,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SelectArtist extends AppCompatActivity {
+public class SelectFilter extends AppCompatActivity {
     private int count;
 
     // Create constant list of page title names
     private List<String> PAGE_NAMES;
-
 
     // Create constant list of page descriptions
     private List<String> PAGE_DESCRIPTIONS;
 
     // Create constant list of edit text hints
     private List<String> PAGE_TEXT_HINTS;
+
+    private EditText editTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_select_artist);
+        setContentView(R.layout.activity_select_filter);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -50,12 +51,16 @@ public class SelectArtist extends AppCompatActivity {
         );
 
         count = 0;
-
+        editTextView = findViewById(R.id.editTextText1);
         setTextView(count);
+
+        ActivityUtil.setNavigationDrawerEvents(this);
     }
 
     public void openParentPage(View view) {
+        editTextView.setText("");
         if (count == 0) {
+            setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
             finish();
         }
         else {
@@ -70,7 +75,7 @@ public class SelectArtist extends AppCompatActivity {
      */
     public void openNextPage(View view) {
         count += 1;
-
+        editTextView.setText("");
         if (count == PAGE_NAMES.size()) {
             count -= 1;
             // open the page where prompts user to input amount of songs
@@ -91,10 +96,10 @@ public class SelectArtist extends AppCompatActivity {
     public void setTextView(int count) {
         TextView textViewTitle = findViewById(R.id.textViewTitle);
         TextView textViewDesc = findViewById(R.id.textViewDesc);
-        EditText editTextHint = findViewById(R.id.editTextText1);
+
 
         textViewTitle.setText(PAGE_NAMES.get(count));
         textViewDesc.setText(PAGE_DESCRIPTIONS.get(count));
-        editTextHint.setHint(PAGE_TEXT_HINTS.get(count));
+        editTextView.setHint(PAGE_TEXT_HINTS.get(count));
     }
 }

@@ -4,11 +4,11 @@
     <shared>
       <config>
         <device id="_device_class_phone" />
+        <device id="_device_class_tablet" />
         <device id="wearos_small_round" />
         <device id="pixel_8" />
         <device id="Nexus 5X" />
         <device id="_device_class_desktop" />
-        <device id="_device_class_tablet" />
         <device id="_device_class_foldable" />
       </config>
     </shared>
@@ -19,12 +19,23 @@
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_artist.xml">
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_filter.xml">
         <config>
+          <state>Landscape</state>
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_music_num.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_favourite_page.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_history_page.xml">
         <config>
           <theme>@style/Theme.MusicFinder</theme>
         </config>
@@ -34,7 +45,7 @@
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml">
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_filter.xml">
         <config>
           <theme>@style/Theme.MusicFinder</theme>
         </config>
@@ -45,6 +56,16 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/background_image_view.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/menu_icon.xml">
+        <config>
+          <theme>@style/Theme.MusicFinder</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/nav_layout.xml">
         <config>
           <theme>@style/Theme.MusicFinder</theme>
         </config>
@@ -66,17 +87,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="213bc9fb-cf9b-49fa-a25e-c53b27c7eaf2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/icon_close.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/icon_fav.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/icon_history.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/drawable/icon_menu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/sidebar_header.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/menu/menu_items.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/ActivityUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/FavouritePage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/HistoryPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_favourite_page.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_history_page.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_filter.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/menu_icon.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/nav_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectArtist.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_artist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_filter.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/sidebar_header.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/sidebar_header.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/themes.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +115,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\User\.android\avd\Pixel_3a_API_34_extension_level_7_x86_64.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VBN7N19319001802]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/MusicFinderApp">
       <ProjectState />
@@ -113,6 +142,7 @@
         <option value="valueResourceFile" />
         <option value="resourceFile" />
         <option value="layoutResourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -139,19 +169,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "yi-yang",
-    "last_directory_selection": "C:/Users/User/Desktop/FIT3162MusicFinder/MusicFinderApp/app/src/main/res/values",
-    "last_opened_file_path": "C:/Users/User/Desktop/FIT3162MusicFinder/MusicFinderApp/app/src/main/res/drawable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;yi-yang&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/User/Desktop/FIT3162MusicFinder/MusicFinderApp/app/src/main/res/values&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Desktop/FIT3162MusicFinder/MusicFinderApp/app/src/main/res/drawable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\User\Desktop\FIT3162MusicFinder\MusicFinderApp\app\src\main\res\drawable" />

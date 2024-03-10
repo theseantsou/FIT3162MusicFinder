@@ -3,16 +3,18 @@ package com.example.musicfinder;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+
+import androidx.annotation.Nullable;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
-import androidx.core.view.GravityCompat;
+
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -24,9 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ImageView navigationIcon;
-    private MenuItem favItem, historyItem;
 
-
+    private boolean isButtonClickable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +40,34 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        setNavigationDrawerEvents();
-    }
-
-    private void setNavigationDrawerEvents() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        navigationIcon = findViewById(R.id.imageMenu);
-        Menu menu = navigationView.getMenu();
-
-        favItem = menu.findItem(R.id.nav_fav);
-        historyItem = menu.findItem(R.id.nav_history);
-
-        navigationIcon.setOnClickListener(this::openNavigationMenu);
+        ActivityUtil.setNavigationDrawerEvents(this);
 
 
     }
 
-    public void openNavigationMenu(View view) {
-        drawerLayout.openDrawer(GravityCompat.END);
-    }
 
+    // TODO: FIX THIS ENSURE ONLY ONE INSTANCE IS OPENED
     public void openArtistPage(View view) {
-        Intent intent = new Intent(this, SelectArtist.class);
-        startActivity(intent);
+        if (isButtonClickable) {
+            isButtonClickable = false; // Disable button
+
+            Intent intent = new Intent(this, SelectFilter.class);
+            startActivity(intent);
+
+        }
     }
+    // TODO: FIX THIS ENSURE ONLY ONE INSTANCE IS OPENED
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(requestCode);
+        builder.show();
+        if (requestCode == ActivityUtil.REQUEST_CODE_SELECT_ARTIST) {
+            // Re-enable button after activity result
+
+            isButtonClickable = true;
+        }
+    }
+
 }

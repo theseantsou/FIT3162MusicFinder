@@ -9,16 +9,7 @@
     tools:context=".MainActivity"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_gravity="end"
-        android:layout_height="match_parent"
-        android:layout_width="200dp"
-        app:itemTextColor="@color/white"
-        app:itemIconTint="@color/white"
-        android:background="@color/black"
-        app:headerLayout="@layout/sidebar_header"
-        app:menu="@menu/menu_items" />
+    <include layout="@layout/nav_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -42,6 +33,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:text="@string/welcome_to_music_finder"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/white"
@@ -49,24 +41,25 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.135"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.469" />
+            app:layout_constraintVertical_bias="0.377" />
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="301dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="30dp"
             android:text="@string/music_finder_description"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.233"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.639" />
+            app:layout_constraintVertical_bias="0.579" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
@@ -74,6 +67,7 @@
             android:layout_height="54dp"
             android:background="@drawable/get_started_button"
             android:fontFamily="@font/roboto_condensed_reg"
+            android:textColor="@color/black"
             android:text="@string/get_started_button_text"
             android:textSize="15sp"
             android:onClick="openArtistPage"
@@ -84,18 +78,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.81" />
 
-        <ImageView
-            android:id="@+id/imageMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.018"
-            app:srcCompat="@drawable/icon_menu"
-            android:contentDescription="@string/menu_icon_desc" />
+        <include layout="@layout/menu_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
