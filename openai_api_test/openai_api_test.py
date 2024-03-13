@@ -1,6 +1,9 @@
 from openai import OpenAI
 from config import OPENAI_API_KEY, GPT_MODEL, API_URL
 import requests
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 
 def request_gpt(client, txt_prompt, instruction="Be nice", temperature=0.7):
@@ -20,7 +23,7 @@ def request_gpt(client, txt_prompt, instruction="Be nice", temperature=0.7):
         "model": GPT_MODEL,
         "temperature": temperature,
         "messages": message_list,
-        "max_tokens": 300,
+        #"max_tokens": 300,
     }
 
     try:
@@ -35,16 +38,18 @@ def request_gpt(client, txt_prompt, instruction="Be nice", temperature=0.7):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
+    
 
+@app.route("/process_request", methods=["POST"])
+def process_request():
+    data = request.json
+    prompt = data.get("prompt")
 
-def main():
     client = OpenAI(api_key=OPENAI_API_KEY)
-    prompt = "Give me 5 random songs in JSON format, with the title and artist as keys."
     response = request_gpt(client, prompt)
-    print(response)
     return response
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
 
