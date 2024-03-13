@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -70,5 +72,17 @@ public class ActivityUtil {
         //close navigation drawer
         return true;
     }
+
+    public static ActivityResultLauncher<Intent> getResultLauncher(AppCompatActivity activity) {
+        return activity.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == REQUEST_CODE_SELECT_ARTIST) {
+                        ((LimitButtonClickOnce) activity).setButtonClickable(true);
+                    }
+                }
+        );
+    }
+
 
 }

@@ -15,28 +15,12 @@
     <layouts>
       <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_main.xml">
         <config>
-          <state>landscape</state>
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_filter.xml">
         <config>
           <state>Landscape</state>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_music_num.xml">
-        <config>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_favourite_page.xml">
-        <config>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_history_page.xml">
-        <config>
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
@@ -60,26 +44,6 @@
           <theme>@style/Theme.MusicFinder</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/menu_icon.xml">
-        <config>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/nav_layout.xml">
-        <config>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/sidebar_header.xml">
-        <config>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/MusicFinderApp/app/src/main/res/menu/menu_items.xml">
-        <config>
-          <theme>@style/Theme.MusicFinder</theme>
-        </config>
-      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -87,25 +51,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="213bc9fb-cf9b-49fa-a25e-c53b27c7eaf2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/ActivityUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/FavouritePage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/HistoryPage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_favourite_page.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_history_page.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_filter.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/menu_icon.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/nav_layout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/LimitButtonClickOnce.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/ActivityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/ActivityUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectArtist.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/java/com/example/musicfinder/SelectFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_artist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_filter.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_filter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout-land/activity_select_filter.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_artist.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/sidebar_header.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/sidebar_header.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_filter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicFinderApp/app/src/main/res/layout/activity_select_filter.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,6 +98,7 @@
         <option value="resourceFile" />
         <option value="layoutResourceFile" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
