@@ -1,6 +1,8 @@
 package com.example.musicfinder;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +22,16 @@ public class GeneratePlaylist extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        ActivityUtil.setNavigationDrawerEvents(this);
+
+        View backImage = findViewById(R.id.imageViewBack);
+        backImage.setOnClickListener(v -> openHomePage());
+    }
+
+    private void openHomePage() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        
     }
 }

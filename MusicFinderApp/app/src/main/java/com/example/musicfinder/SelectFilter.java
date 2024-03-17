@@ -88,12 +88,7 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
         Stream.of(nextButton, skipButton)
                 .forEach(b->b.setOnClickListener(v->openNextPage()));
 
-<<<<<<< Updated upstream
         launcher = ActivityUtil.getResultLauncher(this);
-=======
-
-
->>>>>>> Stashed changes
     }
 
     public void closePage() {

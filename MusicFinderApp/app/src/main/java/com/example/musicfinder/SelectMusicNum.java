@@ -1,17 +1,27 @@
 package com.example.musicfinder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SelectMusicNum extends AppCompatActivity {
+public class SelectMusicNum extends AppCompatActivity implements LimitButtonClickOnce{
+    private boolean isButtonClickable;
+
+    @Override
+    public void setButtonClickable(boolean buttonClickable) {
+        isButtonClickable = buttonClickable;
+    }
+
+    private ActivityResultLauncher<Intent> launcher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +52,8 @@ public class SelectMusicNum extends AppCompatActivity {
         View backImage = findViewById(R.id.backImageView);
         backImage.setOnClickListener(v -> openParentPage());
 
+        launcher = ActivityUtil.getResultLauncher(this);
+
 
     }
 
@@ -52,5 +64,11 @@ public class SelectMusicNum extends AppCompatActivity {
 
     public void openPlaylistPage(View view) {
         // Todo: have a playlist generation page
+        Intent intent = new Intent(this, GeneratePlaylist.class);
+
+        launcher.launch(intent);
+
     }
+
+
 }
