@@ -64,16 +64,17 @@
             app:layout_constraintVertical_bias="0.262" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button2"
-            android:layout_width="286dp"
+            android:id="@+id/buttonGenerate"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
             android:background="@drawable/generate_playlist_button"
             android:textAllCaps="false"
             android:textSize="15sp"
             android:text="@string/generate_playlist"
             android:textColor="@color/white"
             android:fontFamily="@font/roboto_condensed_reg"
-            android:onClick="openPlaylistPage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.635" />
+            app:layout_constraintVertical_bias="0.57" />
 
         <TextView
             android:id="@+id/textView2"
@@ -66,8 +66,10 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button2"
-            android:layout_width="286dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginStart="300dp"
+            android:layout_marginEnd="300dp"
             android:background="@drawable/generate_playlist_button"
             android:fontFamily="@font/roboto_condensed_reg"
             android:onClick="openPlaylistPage"
@@ -77,10 +79,10 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.955" />
+            app:layout_constraintTop_toBottomOf="@id/numberPicker"
+            app:layout_constraintVertical_bias="0.578" />
 
         <include layout="@layout/menu_icon"/>
 

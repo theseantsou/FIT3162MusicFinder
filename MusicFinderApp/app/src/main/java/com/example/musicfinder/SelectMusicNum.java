@@ -54,7 +54,8 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
 
         launcher = ActivityUtil.getResultLauncher(this);
 
-
+        View generatePlaylistButton = findViewById(R.id.buttonGenerate);
+        generatePlaylistButton.setOnClickListener(v -> openPlaylistPage());
     }
 
     public void openParentPage() {
@@ -62,7 +63,7 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
         finish();
     }
 
-    public void openPlaylistPage(View view) {
+    public void openPlaylistPage() {
         // Todo: have a playlist generation page
         Intent intent = new Intent(this, GeneratePlaylist.class);
 
