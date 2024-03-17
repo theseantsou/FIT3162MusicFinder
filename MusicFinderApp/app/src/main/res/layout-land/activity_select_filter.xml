@@ -75,8 +75,10 @@
 
         <EditText
             android:id="@+id/editTextText1"
-            android:layout_width="500dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
             android:autofillHints="name"
             android:background="@drawable/text_prompt"
             android:ems="10"

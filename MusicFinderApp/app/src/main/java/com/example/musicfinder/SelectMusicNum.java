@@ -5,13 +5,13 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SelectMusicNum extends AppCompatActivity {
-    private NumberPicker numberPicker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,18 +23,30 @@ public class SelectMusicNum extends AppCompatActivity {
             return insets;
         });
 
-        numberPicker = findViewById(R.id.numberPicker);
+        NumberPicker numberPicker = findViewById(R.id.numberPicker);
 
         final String[] displayedValues = {"10", "20", "30", "40", "50"};
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(displayedValues.length - 1);
         numberPicker.setDisplayedValues(displayedValues);
 
+        ActivityUtil.setNavigationDrawerEvents(this);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                openParentPage();
+            }
+        });
+
+        View backImage = findViewById(R.id.backImageView);
+        backImage.setOnClickListener(v -> openParentPage());
 
 
     }
 
-    public void openParentPage(View view) {
+    public void openParentPage() {
+        setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
         finish();
     }
 

@@ -57,19 +57,29 @@ public class ActivityUtil {
         });
     }
 
-    private static boolean handleNavigationItemSelected(Activity activity, MenuItem item) {
+    private static boolean handleNavigationItemSelected(AppCompatActivity activity, MenuItem item) {
         // Handle the navigation item click here
         // You can switch between different activities based on the clicked item
         // Example:
 
+        if (activity instanceof HistoryPage || activity instanceof FavouritePage) {
+            activity.finish();
+        }
         if (item.getItemId() == R.id.nav_fav) {
             activity.startActivity(new Intent(activity, FavouritePage.class));
+            if (activity instanceof FavouritePage) {
+                activity.overridePendingTransition(0, 0);
+            }
         }
 
         else if (item.getItemId() == R.id.nav_history) {
             activity.startActivity(new Intent(activity, HistoryPage.class));
+            if (activity instanceof HistoryPage) {
+                activity.overridePendingTransition(0, 0);
+            }
+
         }
-        //close navigation drawer
+
         return true;
     }
 
@@ -83,6 +93,8 @@ public class ActivityUtil {
                 }
         );
     }
+
+
 
 
 }
