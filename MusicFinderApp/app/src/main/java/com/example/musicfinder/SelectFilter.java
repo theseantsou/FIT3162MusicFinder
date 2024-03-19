@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -33,6 +34,8 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
     // Create constant list of edit text hints
     private List<String> PAGE_TEXT_HINTS;
     private EditText editTextView;
+
+    private ActivityResultLauncher<Intent> launcher;
 
     @Override
     public void setButtonClickable(boolean buttonClickable) {
@@ -74,16 +77,18 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
             }
         });
 
+        launcher = ActivityUtil.getResultLauncher(this);
+
         View backImage = findViewById(R.id.imageViewBack);
         backImage.setOnClickListener(v->closePage());
 
         View nextButton = findViewById(R.id.textViewNext);
-
         View skipButton = findViewById(R.id.textViewSkip);
 
         Stream.of(nextButton, skipButton)
                 .forEach(b->b.setOnClickListener(v->openNextPage()));
 
+        launcher = ActivityUtil.getResultLauncher(this);
     }
 
     public void closePage() {
@@ -109,7 +114,7 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
             count -= 1;
             // open the page where prompts user to input amount of songs
             Intent intent = new Intent(this, SelectMusicNum.class);
-            startActivity(intent);
+            launcher.launch(intent);
         }
         else {
             // TODO: store the info on the database or locally to parse to LLM
