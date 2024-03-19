@@ -77,11 +77,12 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
             }
         });
 
+        launcher = ActivityUtil.getResultLauncher(this);
+
         View backImage = findViewById(R.id.imageViewBack);
         backImage.setOnClickListener(v->closePage());
 
         View nextButton = findViewById(R.id.textViewNext);
-
         View skipButton = findViewById(R.id.textViewSkip);
 
         Stream.of(nextButton, skipButton)

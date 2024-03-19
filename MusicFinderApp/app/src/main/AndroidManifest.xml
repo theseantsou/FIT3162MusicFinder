@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicFinder"
         tools:targetApi="31">
-
+        <activity
+            android:name=".GeneratePlaylist"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
