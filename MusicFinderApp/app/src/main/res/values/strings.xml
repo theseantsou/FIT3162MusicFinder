@@ -16,27 +16,17 @@
     <string name="song_list_title">Song List</string>
 
     <string-array name="title_name">
-        <item>Artist</item>
+        <item>Occasion or Mood</item>
         <item>Genre</item>
         <item>Time Period</item>
-        <item>Occasion or Mood</item>
-        <item>Additional Filters</item>
+        <item>Artist</item>
     </string-array>
 
     <string-array name="page_desc">
-        <item>Start your music journey by selecting a specific artist or band.</item>
+        <item>Customise your playlist for specific situations or emotional states.</item>
         <item>It\'s time to define the genre you\'re interested in.</item>
         <item>Specify the time period you prefer.</item>
-        <item>Customise your playlist for specific situations or emotional states.</item>
-        <item>Additional filters to refine the music recommendations.</item>
-    </string-array>
-
-    <string-array name="page_hint">
-        <item>Enter an artist/band…</item>
-        <item>Enter a genre…</item>
-        <item>Choose a specific decade…</item>
-        <item>Describe the occasion/mood…</item>
-        <item>Filters to apply…</item>
+        <item>Start your music journey by selecting a specific artist or band.</item>
     </string-array>
 
 
