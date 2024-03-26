@@ -14,7 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SelectMusicNum extends AppCompatActivity implements LimitButtonClickOnce{
-    private boolean isButtonClickable;
+    private boolean isButtonClickable = true;
 
     @Override
     public void setButtonClickable(boolean buttonClickable) {
@@ -65,9 +65,12 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
 
     public void openPlaylistPage() {
         // Todo: have a playlist generation page
-        Intent intent = new Intent(this, GeneratePlaylist.class);
+        if (isButtonClickable) {
+            isButtonClickable = false;
+            Intent intent = new Intent(this, GeneratePlaylist.class);
+            launcher.launch(intent);
+        }
 
-        launcher.launch(intent);
 
     }
 

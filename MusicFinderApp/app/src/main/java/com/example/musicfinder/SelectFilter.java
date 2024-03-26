@@ -31,10 +31,6 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
     // Create constant list of page descriptions
     private List<String> PAGE_DESCRIPTIONS;
 
-    // Create constant list of edit text hints
-    private List<String> PAGE_TEXT_HINTS;
-    private EditText editTextView;
-
     private ActivityResultLauncher<Intent> launcher;
 
     @Override
@@ -60,12 +56,8 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
         PAGE_DESCRIPTIONS = Collections.unmodifiableList(
                 Arrays.asList(getResources().getStringArray(R.array.page_desc))
         );
-        PAGE_TEXT_HINTS = Collections.unmodifiableList(
-                Arrays.asList(getResources().getStringArray(R.array.page_hint))
-        );
 
         count = 0;
-        editTextView = findViewById(R.id.editTextText1);
         setTextView(count);
 
         ActivityUtil.setNavigationDrawerEvents(this);
@@ -92,7 +84,6 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
     }
 
     public void closePage() {
-        editTextView.setText("");
         if (count == 0) {
             setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
             finish();
@@ -109,12 +100,16 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
      */
     public void openNextPage() {
         count += 1;
-        editTextView.setText("");
         if (count == PAGE_NAMES.size()) {
             count -= 1;
-            // open the page where prompts user to input amount of songs
-            Intent intent = new Intent(this, SelectMusicNum.class);
-            launcher.launch(intent);
+            if (isButtonClickable) {
+                isButtonClickable = false;
+                // open the page where prompts user to input amount of songs
+                Intent intent = new Intent(this, SelectMusicNum.class);
+                launcher.launch(intent);
+
+            }
+
         }
         else {
             // TODO: store the info on the database or locally to parse to LLM
@@ -130,11 +125,8 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
     public void setTextView(int count) {
         TextView textViewTitle = findViewById(R.id.textViewTitle);
         TextView textViewDesc = findViewById(R.id.textViewDesc);
-
-
         textViewTitle.setText(PAGE_NAMES.get(count));
         textViewDesc.setText(PAGE_DESCRIPTIONS.get(count));
-        editTextView.setHint(PAGE_TEXT_HINTS.get(count));
     }
 
 
