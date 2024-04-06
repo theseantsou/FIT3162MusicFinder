@@ -19,7 +19,7 @@ public class Main {
             conn.setDoOutput(true);
 
             // JSON data to send in the request body
-            String jsonData = "{\"prompt\": \"Give me 5 songs in json format as a string with title and artist, don't say anything else\"}";
+            String jsonData = "{\"prompt\": \"Give me 5 songs in json format as a string with title and artist\"}";
 
             // Write JSON data to the request body
             try (OutputStream os = conn.getOutputStream()) {

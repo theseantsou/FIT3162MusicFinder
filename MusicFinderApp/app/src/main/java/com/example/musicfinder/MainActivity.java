@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
         isButtonClickable = buttonClickable;
     }
 
-    private boolean isButtonClickable = true;
+    private boolean isButtonClickable;
     private ActivityResultLauncher<Intent> launcher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        this.isButtonClickable = true;
 
         // Set the navigation menu events
         ActivityUtil.setNavigationDrawerEvents(this);
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
             isButtonClickable = false; // Disable button
 
             // Launch the SelectFilter page
-            Intent intent = new Intent(this, SelectFilter.class);
+            Intent intent = new Intent(this, SelectMood.class);
             launcher.launch(intent);
         }
     }

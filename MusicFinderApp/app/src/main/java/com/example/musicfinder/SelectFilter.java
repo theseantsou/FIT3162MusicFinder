@@ -20,22 +20,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
-    private int count;
-
-    private boolean isButtonClickable = true;
+public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
+    private boolean isButtonClickable;
 
     // Create constant list of page title names
-    private List<String> PAGE_NAMES;
+    private TextView pageName;
 
     // Create constant list of page descriptions
-    private List<String> PAGE_DESCRIPTIONS;
+    private TextView pageDescription;
+
+    private Class<?> nextPage;
 
     private ActivityResultLauncher<Intent> launcher;
 
     @Override
     public void setButtonClickable(boolean buttonClickable) {
-        isButtonClickable = buttonClickable;
+        this.isButtonClickable = buttonClickable;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +48,7 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
             return insets;
         });
 
-        // List of pages name, description, text hints since the filter page is similar
-        // Don't need to open separate instance
-        PAGE_NAMES = Collections.unmodifiableList(
-                Arrays.asList(getResources().getStringArray(R.array.title_name))
-        );
-        PAGE_DESCRIPTIONS = Collections.unmodifiableList(
-                Arrays.asList(getResources().getStringArray(R.array.page_desc))
-        );
-
-        count = 0;
-        setTextView(count);
+        this.isButtonClickable = true;
 
         ActivityUtil.setNavigationDrawerEvents(this);
 
@@ -69,7 +59,7 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
             }
         });
 
-        launcher = ActivityUtil.getResultLauncher(this);
+        this.launcher = ActivityUtil.getResultLauncher(this);
 
         View backImage = findViewById(R.id.imageViewBack);
         backImage.setOnClickListener(v->closePage());
@@ -80,55 +70,40 @@ public class SelectFilter extends AppCompatActivity implements LimitButtonClickO
         Stream.of(nextButton, skipButton)
                 .forEach(b->b.setOnClickListener(v->openNextPage()));
 
-        launcher = ActivityUtil.getResultLauncher(this);
+        this.launcher = ActivityUtil.getResultLauncher(this);
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = (TextView) findViewById(R.id.textViewTitle);
+        this.pageName.setText(pageName);
+    }
+
+    public void setPageDescription(String pageDescription) {
+        this.pageDescription = (TextView) findViewById(R.id.textViewDesc);
+        this.pageDescription.setText(pageDescription);
+    }
+
+    public void setNextPage(Class<?> nextPage) {
+        this.nextPage = nextPage;
     }
 
     public void closePage() {
-        if (count == 0) {
-            setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
-            finish();
-        }
-        else {
-            count -= 1;
-            setTextView(count);
-        }
-    }
+        setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
+        finish();
 
+    }
 
     /**
      * Button click event to open next page depending on the count
      */
     public void openNextPage() {
-        count += 1;
-        if (count == PAGE_NAMES.size()) {
-            count -= 1;
-            if (isButtonClickable) {
-                isButtonClickable = false;
-                // open the page where prompts user to input amount of songs
-                Intent intent = new Intent(this, SelectMusicNum.class);
-                launcher.launch(intent);
-
-            }
-
-        }
-        else {
-            // TODO: store the info on the database or locally to parse to LLM
-            setTextView(count);
+        if (isButtonClickable) {
+            // open the page where prompts user to input amount of songs
+            Intent intent = new Intent(this, nextPage);
+            launcher.launch(intent);
+            setButtonClickable(false);
         }
 
     }
-
-    /**
-     * Function that sets the TextView and EditView based on the page currently on
-     * @param count the page number currently on
-     */
-    public void setTextView(int count) {
-        TextView textViewTitle = findViewById(R.id.textViewTitle);
-        TextView textViewDesc = findViewById(R.id.textViewDesc);
-        textViewTitle.setText(PAGE_NAMES.get(count));
-        textViewDesc.setText(PAGE_DESCRIPTIONS.get(count));
-    }
-
-
 
 }
