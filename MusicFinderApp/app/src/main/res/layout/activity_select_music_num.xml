@@ -5,7 +5,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectMusicNum">
+    tools:context=".SelectMusicNum"
+    android:background="@drawable/linear_background">
 
     <include layout="@layout/nav_layout" />
 
@@ -13,12 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main">
-
-        <include
-            layout="@layout/background_image_view"
-            android:id="@+id/backgroundLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <ImageView
             android:id="@+id/backImageView"

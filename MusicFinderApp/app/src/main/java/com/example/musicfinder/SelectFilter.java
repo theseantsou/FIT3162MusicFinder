@@ -3,30 +3,21 @@ package com.example.musicfinder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable;
-
-    // Create constant list of page title names
     private TextView pageName;
-
-    // Create constant list of page descriptions
     private TextView pageDescription;
 
     private Class<?> nextPage;
