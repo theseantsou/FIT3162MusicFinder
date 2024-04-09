@@ -19,6 +19,9 @@
             android:name=".SelectGenre"
             android:exported="false" />
         <activity
+            android:name=".SelectPeriod"
+            android:exported="false" />
+        <activity
             android:name=".SelectArtist"
             android:exported="false" />
         <activity
