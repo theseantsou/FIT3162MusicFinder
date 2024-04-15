@@ -35,13 +35,23 @@ def request_openAI(prompt, temperature=0.2, instruction="Reply in json format on
 
 @app.route("/api/request-filter", methods=["POST"])
 def request_filter():
+
     filter_type = request.json.get("type")
+    previous_filters = request.json.get("previous_filter")
 
-    prompt = "Give me 5 random " + filter_type
-    instruction = "Generate a JSON formatted response, specifically containing a key \"filters\" and values being a list of items requested. The output should contain only the JSON formatted response with no additional text"
+    previous_filters_str = " that fits any of the following category:" if len(
+        previous_filters) else ""
 
-    return jsonify(request_openAI(prompt, 0.6, instruction))
+    for index, item in enumerate(previous_filters):
+        previous_filters_str += (" " if index == 0 else ", ") + item
+
+    prompt = "Give me 5 musical " + filter_type + previous_filters_str
+    print(prompt)
+    instruction = "Generate a JSON formatted response with the \"filters\" key and a list of values" + " Ensure the response contains only the JSON formatted response, with no additional text. Example response format: { \"filters\": [\"" + filter_type + "_1\", \"" + filter_type + "_2\", \"" + filter_type + "_3\", \"" + \
+        filter_type + "_4\", \"" + filter_type + "_5\"] } Please note that the example response contains placeholders for " + filter_type + \
+        " and should be replaced with appropriate values based on the given categories. Please note that time period have the following format example: XXXXs, the X indicate digits 0-9"
+    return jsonify(request_openAI(prompt, 0.2, instruction))
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

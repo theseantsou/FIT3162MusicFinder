@@ -1,35 +1,31 @@
 package com.example.musicfinder;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.Arrays;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
+public abstract class SelectFilter<T extends AppCompatActivity> extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable;
-
-    // Create constant list of page title names
     private TextView pageName;
-
-    // Create constant list of page descriptions
     private TextView pageDescription;
 
-    private Class<?> nextPage;
+    private Class<T> nextPage;
 
     private ActivityResultLauncher<Intent> launcher;
 
@@ -71,6 +67,22 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
                 .forEach(b->b.setOnClickListener(v->openNextPage()));
 
         this.launcher = ActivityUtil.getResultLauncher(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONArray response = BackendHelper.requestFilters("Mood", Collections.emptyList());
+                for (int i = 0; i < response.length(); i++) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParent());
+                    try {
+                        builder.setMessage(response.getString(i));
+                        builder.show();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }).start();
     }
 
     public void setPageName(String pageName) {
@@ -83,7 +95,7 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
         this.pageDescription.setText(pageDescription);
     }
 
-    public void setNextPage(Class<?> nextPage) {
+    public void setNextPage(Class<T> nextPage) {
         this.nextPage = nextPage;
     }
 
