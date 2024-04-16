@@ -36,7 +36,6 @@ public class BackendHelper {
                 JSONArray jsonArray = jsonObject.getJSONArray("filters");
                 List<String> filters = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    System.out.println("hello");
                     filters.add(jsonArray.getString(i));
                 }
 
@@ -51,14 +50,15 @@ public class BackendHelper {
 
     @NonNull
     private static HttpURLConnection getHttpURLConnection(String filterType, List<String> previousFilter) throws URISyntaxException, IOException {
-        URI uri = new URI("http://192.168.0.69:5000/api/request-filter");
+        URI uri = new URI("http://192.168.43.189:5000/api/request-filter");
         URL url = uri.toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
+        JSONArray prevFilterArray = new JSONArray(previousFilter);
 
-        String jsonData = "{\"type\" : \""+ filterType + "\",\"previous_filter\" :" + previousFilter + "}";
+        String jsonData = "{\"type\" : \""+ filterType + "\",\"previous_filter\" :" + prevFilterArray.toString() + "}";
 
         try (OutputStream stream = connection.getOutputStream()) {
             byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);

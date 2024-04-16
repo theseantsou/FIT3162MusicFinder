@@ -13,13 +13,12 @@ import java.util.Collections;
 
 public class SelectMood extends SelectFilter {
 
+    public SelectMood() {
+        super("Occasion or Mood", "Customise your playlist for specific situations or emotional states.", SelectGenre.class);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.setPageName("Occasion or Mood");
-        this.setPageDescription("Customise your playlist for specific situations or emotional states.");
-        this.setNextPage(SelectGenre.class);
 
     }
 }

@@ -1,6 +1,8 @@
 package com.example.musicfinder;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -8,30 +10,32 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable;
-    private TextView pageName;
-    private TextView pageDescription;
-
+    private String pageName;
+    private String pageDescription;
     private Class<? extends AppCompatActivity> nextPage;
 
     private ActivityResultLauncher<Intent> launcher;
+
+    private List<AppCompatButton> buttonList;
+
+    public SelectFilter(String pageTitle, String pageDesc, Class<? extends AppCompatActivity> nextPage) {
+        pageName = pageTitle;
+        pageDescription = pageDesc;
+        this.nextPage = nextPage;
+    }
 
     @Override
     public void setButtonClickable(boolean buttonClickable) {
@@ -72,7 +76,9 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
         this.launcher = ActivityUtil.getResultLauncher(this);
 
-        List<AppCompatButton> buttonList = new ArrayList<>();
+        setPageProperties();
+
+        buttonList = new ArrayList<>();
         int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5}; // IDs of your buttons
 
         for (int id : buttonIds) {
@@ -80,16 +86,51 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
             buttonList.add(button);
         }
 
+        populateButtons();
+
+        for (AppCompatButton button : buttonList) {
+            button.setOnClickListener(v->recommendationButtonClicked((AppCompatButton) v));
+        }
+    }
+
+    public void recommendationButtonClicked(AppCompatButton button) {
+        int currentTextColor = button.getCurrentTextColor();
+
+        int textColor;
+        Drawable backgroundDrawable;
+
+        boolean isCurrentlySelected = currentTextColor == Color.WHITE;
+
+        textColor = isCurrentlySelected ? Color.BLACK : Color.WHITE;
+        backgroundDrawable = isCurrentlySelected ?
+                ContextCompat.getDrawable(this, R.drawable.white_button) :
+                ContextCompat.getDrawable(this, R.drawable.black_button);
+
+        if (isCurrentlySelected) {
+            // Unselect button (remove from previous filters)
+            ActivityUtil.removeFilter(button.getText().toString());
+        }
+        else {
+            ActivityUtil.addFilter(button.getText().toString());
+        }
+
+
+        button.setBackgroundDrawable(backgroundDrawable);
+        button.setTextColor(textColor);
+
+    }
+
+    public void populateButtons() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<String> response = BackendHelper.requestFilters(pageName.getText().toString(), Collections.emptyList());
+                List<String> response = BackendHelper.requestFilters(pageName, ActivityUtil.getPreviousFilter());
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        for (int i = 0; i < response.size(); i++) {
+                        for (int i = 0; i < buttonList.size(); i++) {
                             buttonList.get(i).setText(response.get(i));
                         }
                     }
@@ -98,21 +139,14 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
 
         }).start();
-
     }
 
-    public void setPageName(String pageName) {
-        this.pageName = (TextView) findViewById(R.id.textViewTitle);
-        this.pageName.setText(pageName);
-    }
+    public void setPageProperties() {
+        TextView pageNameView = findViewById(R.id.textViewTitle);
+        pageNameView.setText(this.pageName);
 
-    public void setPageDescription(String pageDescription) {
-        this.pageDescription = (TextView) findViewById(R.id.textViewDesc);
-        this.pageDescription.setText(pageDescription);
-    }
-
-    public void setNextPage(Class<? extends AppCompatActivity> nextPage) {
-        this.nextPage = nextPage;
+        TextView pageDescView = findViewById(R.id.textViewDesc);
+        pageDescView.setText(this.pageDescription);
     }
 
     public void closePage() {

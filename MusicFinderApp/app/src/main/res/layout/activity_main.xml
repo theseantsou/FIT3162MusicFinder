@@ -68,7 +68,7 @@
             android:layout_height="54dp"
             android:layout_marginStart="75dp"
             android:layout_marginEnd="75dp"
-            android:background="@drawable/get_started_button"
+            android:background="@drawable/white_button"
             android:fontFamily="@font/roboto_condensed_reg"
             android:text="@string/get_started_button_text"
             android:textColor="@color/black"
