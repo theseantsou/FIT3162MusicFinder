@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from openai import OpenAI
 from config import OPENAI_API_KEY, GPT_MODEL, API_URL
-
+import json
 
 app = Flask(__name__)
 
@@ -49,8 +49,11 @@ def request_filter():
     print(prompt)
     instruction = "Generate a JSON formatted response with the \"filters\" key and a list of values" + " Ensure the response contains only the JSON formatted response, with no additional text. Example response format: { \"filters\": [\"" + filter_type + "_1\", \"" + filter_type + "_2\", \"" + filter_type + "_3\", \"" + \
         filter_type + "_4\", \"" + filter_type + "_5\"] } Please note that the example response contains placeholders for " + filter_type + \
-        " and should be replaced with appropriate values based on the given categories. Please note that time period have the following format example: XXXXs, the X indicate digits 0-9"
-    return jsonify(request_openAI(prompt, 0.2, instruction))
+        " and should be replaced with appropriate values based on the given categories. Ensure that the time period filter is represented in the format XXXXs, where X indicates digits 0-9."
+
+    response = request_openAI(prompt, 0.5, instruction)
+    parsed_object = json.loads(response)
+    return jsonify(parsed_object)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 package com.example.musicfinder;
+
 import android.app.AlertDialog;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -16,10 +16,11 @@ import java.net.URISyntaxException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BackendHelper {
-    public static JSONArray requestFilters(String filterType, List<String> previousFilter) {
+    public static List<String> requestFilters(String filterType, List<String> previousFilter) {
         try {
             HttpURLConnection connection = getHttpURLConnection(filterType, previousFilter);
 
@@ -31,10 +32,17 @@ public class BackendHelper {
                 while ((responseText = reader.readLine()) != null) {
                     response.append(responseText.trim());
                 }
-                JSONObject object = new JSONObject(response.toString());
-                JSONArray items_array = object.getJSONArray("filters");
+                JSONObject jsonObject = new JSONObject(response.toString());
+                JSONArray jsonArray = jsonObject.getJSONArray("filters");
+                List<String> filters = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    System.out.println("hello");
+                    filters.add(jsonArray.getString(i));
+                }
+
+
                 connection.disconnect();
-                return items_array;
+                return filters;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -43,7 +51,7 @@ public class BackendHelper {
 
     @NonNull
     private static HttpURLConnection getHttpURLConnection(String filterType, List<String> previousFilter) throws URISyntaxException, IOException {
-        URI uri = new URI("http://192.168.43.189:5000/api/request-filter");
+        URI uri = new URI("http://192.168.0.69:5000/api/request-filter");
         URL url = uri.toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");

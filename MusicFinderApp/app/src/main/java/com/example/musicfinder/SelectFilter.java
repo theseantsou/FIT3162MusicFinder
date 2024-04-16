@@ -1,6 +1,5 @@
 package com.example.musicfinder;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,23 +8,28 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class SelectFilter<T extends AppCompatActivity> extends AppCompatActivity implements LimitButtonClickOnce {
+public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable;
     private TextView pageName;
     private TextView pageDescription;
 
-    private Class<T> nextPage;
+    private Class<? extends AppCompatActivity> nextPage;
 
     private ActivityResultLauncher<Intent> launcher;
 
@@ -68,21 +72,33 @@ public abstract class SelectFilter<T extends AppCompatActivity> extends AppCompa
 
         this.launcher = ActivityUtil.getResultLauncher(this);
 
+        List<AppCompatButton> buttonList = new ArrayList<>();
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5}; // IDs of your buttons
+
+        for (int id : buttonIds) {
+            AppCompatButton button = findViewById(id);
+            buttonList.add(button);
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JSONArray response = BackendHelper.requestFilters("Mood", Collections.emptyList());
-                for (int i = 0; i < response.length(); i++) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParent());
-                    try {
-                        builder.setMessage(response.getString(i));
-                        builder.show();
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                List<String> response = BackendHelper.requestFilters(pageName.getText().toString(), Collections.emptyList());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        for (int i = 0; i < response.size(); i++) {
+                            buttonList.get(i).setText(response.get(i));
+                        }
                     }
-                }
+                });
             }
+
+
         }).start();
+
     }
 
     public void setPageName(String pageName) {
@@ -95,7 +111,7 @@ public abstract class SelectFilter<T extends AppCompatActivity> extends AppCompa
         this.pageDescription.setText(pageDescription);
     }
 
-    public void setNextPage(Class<T> nextPage) {
+    public void setNextPage(Class<? extends AppCompatActivity> nextPage) {
         this.nextPage = nextPage;
     }
 
