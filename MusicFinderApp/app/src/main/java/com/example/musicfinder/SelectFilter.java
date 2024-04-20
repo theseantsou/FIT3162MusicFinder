@@ -1,10 +1,13 @@
 package com.example.musicfinder;
 
+
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +33,8 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     private ActivityResultLauncher<Intent> launcher;
 
     private List<AppCompatButton> buttonList;
+
+    private ProgressBar loadingAnim;
 
     public SelectFilter(String pageTitle, String pageDesc, Class<? extends AppCompatActivity> nextPage) {
         pageName = pageTitle;
@@ -78,8 +83,10 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
         setPageProperties();
 
+        loadingAnim = findViewById(R.id.progressBar);
+
         buttonList = new ArrayList<>();
-        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5}; // IDs of your buttons
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5};
 
         for (int id : buttonIds) {
             AppCompatButton button = findViewById(id);
@@ -121,6 +128,8 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     }
 
     public void populateButtons() {
+        hideButtons();
+        loadingAnim.setVisibility(View.VISIBLE);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -133,12 +142,26 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
                         for (int i = 0; i < buttonList.size(); i++) {
                             buttonList.get(i).setText(response.get(i));
                         }
+                        showButtons();
+                        loadingAnim.setVisibility(View.INVISIBLE);
                     }
                 });
             }
 
 
         }).start();
+    }
+
+    public void showButtons() {
+        buttonList.forEach(button-> {
+            button.setAlpha(0f);
+            button.setVisibility(View.VISIBLE);
+            button.animate().alpha(1f).setDuration(500).setListener(null);
+        });
+    }
+
+    public void hideButtons() {
+        buttonList.forEach(button->button.setVisibility(View.INVISIBLE));
     }
 
     public void setPageProperties() {

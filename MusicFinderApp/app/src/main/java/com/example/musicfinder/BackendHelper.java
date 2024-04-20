@@ -50,7 +50,7 @@ public class BackendHelper {
 
     @NonNull
     private static HttpURLConnection getHttpURLConnection(String filterType, List<String> previousFilter) throws URISyntaxException, IOException {
-        URI uri = new URI("http://192.168.43.189:5000/api/request-filter");
+        URI uri = new URI("http://192.168.0.69:5000/api/request-filter");
         URL url = uri.toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
