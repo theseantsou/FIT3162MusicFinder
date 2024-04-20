@@ -20,27 +20,30 @@ import java.util.List;
 public class ActivityUtil {
 
     public static final int REQUEST_CODE_SELECT_ARTIST = 1001;
-    private static final List<String> previousFilter = new ArrayList<>();
+    private static final List<String> filters = new ArrayList<>();
+
+    private static int AmountOfSongs = 0;
+
+    public static void setAmountOfSongs(int Amt) {
+        AmountOfSongs = Amt;
+    }
+
+    public static int getAmountOfSongs() {
+        return AmountOfSongs;
+    }
 
     public static void addFilter(String filter) {
-        previousFilter.add(filter);
-        printFilters();
+        filters.add(filter);
     }
 
     public static void removeFilter(String filter) {
-        previousFilter.remove(filter);
-        printFilters();
+        filters.remove(filter);
     }
 
-    public static List<String> getPreviousFilter() {
-        return previousFilter;
+    public static List<String> getFilters() {
+        return filters;
     }
 
-    public static void printFilters() {
-        for (String filter : previousFilter) {
-            System.out.println(filter);
-        }
-    }
     public static void setNavigationDrawerEvents(AppCompatActivity activity) {
         DrawerLayout drawerLayout = activity.findViewById(R.id.drawer_layout);
         NavigationView navigationView = activity.findViewById(R.id.nav_view);

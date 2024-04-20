@@ -10,6 +10,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONArray;
+
+import java.util.List;
+
 public class GeneratePlaylist extends AppCompatActivity {
 
     @Override
@@ -27,6 +31,19 @@ public class GeneratePlaylist extends AppCompatActivity {
 
         View backImage = findViewById(R.id.imageViewBack);
         backImage.setOnClickListener(v -> openHomePage());
+    }
+
+    private void generatePlaylist() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int numberOfSongs = ActivityUtil.getAmountOfSongs();
+                List<String> filters = ActivityUtil.getFilters();
+                JSONArray songsArray = BackendHelper.requestPlaylist(numberOfSongs, filters);
+                System.out.println(songsArray);
+
+            }
+        }).start();
     }
 
     private void openHomePage() {

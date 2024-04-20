@@ -22,19 +22,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable;
-    private String pageName;
-    private String pageDescription;
-    private Class<? extends AppCompatActivity> nextPage;
+    private final String pageName;
+    private final String pageDescription;
+    private final Class<? extends AppCompatActivity> nextPage;
 
     private ActivityResultLauncher<Intent> launcher;
 
     private List<AppCompatButton> buttonList;
+    private List<Boolean> buttonActivatedList;
 
     private ProgressBar loadingAnim;
+    private TextView noInternetText;
 
     public SelectFilter(String pageTitle, String pageDesc, Class<? extends AppCompatActivity> nextPage) {
         pageName = pageTitle;
@@ -74,24 +76,19 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
         backImage.setOnClickListener(v->closePage());
 
         View nextButton = findViewById(R.id.textViewNext);
-        View skipButton = findViewById(R.id.textViewSkip);
+        nextButton.setOnClickListener(v->openNextPage());
 
-        Stream.of(nextButton, skipButton)
-                .forEach(b->b.setOnClickListener(v->openNextPage()));
+        View regenButton = findViewById(R.id.textViewRegen);
+        regenButton.setOnClickListener(v->populateButtons());
 
         this.launcher = ActivityUtil.getResultLauncher(this);
 
         setPageProperties();
 
         loadingAnim = findViewById(R.id.progressBar);
+        noInternetText = findViewById(R.id.textViewNoInternet);
 
-        buttonList = new ArrayList<>();
-        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5};
-
-        for (int id : buttonIds) {
-            AppCompatButton button = findViewById(id);
-            buttonList.add(button);
-        }
+        initializeButtons();
 
         populateButtons();
 
@@ -101,69 +98,109 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     }
 
     public void recommendationButtonClicked(AppCompatButton button) {
-        int currentTextColor = button.getCurrentTextColor();
+        int buttonIndex = buttonList.indexOf(button);
+        if (buttonIndex != -1 && isPageNotLoading()) {
+            int textColor;
+            Drawable backgroundDrawable;
 
-        int textColor;
-        Drawable backgroundDrawable;
+            boolean isCurrentlySelected = buttonActivatedList.get(buttonIndex);
 
-        boolean isCurrentlySelected = currentTextColor == Color.WHITE;
+            textColor = isCurrentlySelected ? Color.BLACK : Color.WHITE;
+            backgroundDrawable = isCurrentlySelected ?
+                    ContextCompat.getDrawable(this, R.drawable.white_button) :
+                    ContextCompat.getDrawable(this, R.drawable.black_button);
 
-        textColor = isCurrentlySelected ? Color.BLACK : Color.WHITE;
-        backgroundDrawable = isCurrentlySelected ?
-                ContextCompat.getDrawable(this, R.drawable.white_button) :
-                ContextCompat.getDrawable(this, R.drawable.black_button);
+            if (isCurrentlySelected) {
+                ActivityUtil.removeFilter(button.getText().toString());
+            }
+            else {
+                ActivityUtil.addFilter(button.getText().toString());
+            }
 
-        if (isCurrentlySelected) {
-            // Unselect button (remove from previous filters)
-            ActivityUtil.removeFilter(button.getText().toString());
+            buttonActivatedList.set(buttonIndex, !buttonActivatedList.get(buttonIndex));
+            button.setBackgroundDrawable(backgroundDrawable);
+            button.setTextColor(textColor);
         }
-        else {
-            ActivityUtil.addFilter(button.getText().toString());
-        }
 
-
-        button.setBackgroundDrawable(backgroundDrawable);
-        button.setTextColor(textColor);
 
     }
 
+    public void initializeButtons() {
+        buttonList = new ArrayList<>();
+        buttonActivatedList = new ArrayList<>();
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5};
+
+        for (int id : buttonIds) {
+            AppCompatButton button = findViewById(id);
+            buttonList.add(button);
+        }
+
+        for (int i = 0; i < buttonList.size(); i++)  {
+            buttonActivatedList.add(false);
+        }
+    }
+
     public void populateButtons() {
-        hideButtons();
-        loadingAnim.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<String> response = BackendHelper.requestFilters(pageName, ActivityUtil.getPreviousFilter());
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
+        if (isPageNotLoading() && getUnselectedButtons() > 0) {
+            hideButtons();
+            loadingAnim.setVisibility(View.VISIBLE);
+            noInternetText.setVisibility(View.INVISIBLE);
+            new Thread(() -> {
+                int filterAmt = getUnselectedButtons();
+                List<String> response = BackendHelper.requestFilters(filterAmt, pageName, ActivityUtil.getFilters());
+                runOnUiThread(() -> {
+                    if (response != null) {
+                        int count = 0;
                         for (int i = 0; i < buttonList.size(); i++) {
-                            buttonList.get(i).setText(response.get(i));
+                            if (!buttonActivatedList.get(i)) {
+
+                                buttonList.get(i).setText(response.get(count));
+                                count++;
+                            }
                         }
                         showButtons();
                         loadingAnim.setVisibility(View.INVISIBLE);
                     }
+                    else {
+                        loadingAnim.setVisibility(View.INVISIBLE);
+                        noInternetText.setVisibility(View.VISIBLE);
+                    }
                 });
-            }
 
+            }).start();
+        }
 
-        }).start();
     }
 
     public void showButtons() {
-        buttonList.forEach(button-> {
-            button.setAlpha(0f);
-            button.setVisibility(View.VISIBLE);
-            button.animate().alpha(1f).setDuration(500).setListener(null);
-        });
+        IntStream.range(0, buttonList.size())
+                .forEach(index -> {
+                    if (!buttonActivatedList.get(index)) {
+                        AppCompatButton button = buttonList.get(index);
+                        button.setAlpha(0f);
+                        button.setVisibility(View.VISIBLE);
+                        button.animate().alpha(1f).setDuration(500).setListener(null);
+                    }
+                });
+
     }
 
     public void hideButtons() {
-        buttonList.forEach(button->button.setVisibility(View.INVISIBLE));
+        IntStream.range(0, buttonList.size())
+                        .forEach(index -> {
+                            if (!buttonActivatedList.get(index)) {
+                                AppCompatButton button = buttonList.get(index);
+                                button.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
     }
 
+    public int getUnselectedButtons() {
+        return (int) buttonActivatedList.stream()
+                .filter(val -> !val)
+                .count();
+    }
     public void setPageProperties() {
         TextView pageNameView = findViewById(R.id.textViewTitle);
         pageNameView.setText(this.pageName);
@@ -173,8 +210,11 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     }
 
     public void closePage() {
-        setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
-        finish();
+        if (isPageNotLoading()) {
+            setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
+            finish();
+        }
+
 
     }
 
@@ -182,13 +222,21 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
      * Button click event to open next page depending on the count
      */
     public void openNextPage() {
-        if (isButtonClickable) {
+        if (isButtonClickable && isPageNotLoading() && hasNoInternetWarning()) {
             // open the page where prompts user to input amount of songs
             Intent intent = new Intent(this, nextPage);
             launcher.launch(intent);
             setButtonClickable(false);
         }
 
+    }
+
+    public boolean isPageNotLoading() {
+        return loadingAnim.getVisibility() == View.INVISIBLE;
+    }
+
+    public boolean hasNoInternetWarning() {
+        return noInternetText.getVisibility() == View.INVISIBLE;
     }
 
 }

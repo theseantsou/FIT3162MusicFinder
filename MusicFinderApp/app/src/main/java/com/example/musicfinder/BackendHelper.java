@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,45 +21,73 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BackendHelper {
-    public static List<String> requestFilters(String filterType, List<String> previousFilter) {
+    static int timeoutMillis = 10000;
+    static final String baseURL = "http://192.168.0.69:5000";
+
+    public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter) {
         try {
-            HttpURLConnection connection = getHttpURLConnection(filterType, previousFilter);
+            JSONArray prevFilterArray = new JSONArray(previousFilter);
+            String jsonData = "{\"amount\" : " + filterAmt + ", \"type\" : \"" + filterType + "\", \"previous_filter\" : " + prevFilterArray + "}";
+            String requestURL = baseURL + "/api/request-filter";
+            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL);
 
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseText = null;
-
-                while ((responseText = reader.readLine()) != null) {
-                    response.append(responseText.trim());
-                }
-                JSONObject jsonObject = new JSONObject(response.toString());
+            try {
+                JSONObject jsonObject = readResponse(connection);
                 JSONArray jsonArray = jsonObject.getJSONArray("filters");
                 List<String> filters = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     filters.add(jsonArray.getString(i));
                 }
-
-
                 connection.disconnect();
                 return filters;
+            } catch (Exception e) {
+                return null;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
+    public static JSONArray requestPlaylist(int amtOfSongs, List<String> filters) {
+        try {
+            JSONArray filterArray = new JSONArray(filters);
+            String jsonData = "{\"amount\" : " + amtOfSongs + ", \"filters\" : " + filterArray + "}";
+            String requestURL = baseURL + "/api/request-playlist";
+            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL);
+            try {
+                JSONObject jsonObject = readResponse(connection);
+                connection.disconnect();
+                return jsonObject.getJSONArray("playlist");
+            } catch (Exception e) {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    public static JSONObject readResponse(HttpURLConnection connection) throws IOException, JSONException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder response = new StringBuilder();
+        String responseText = null;
+
+        while ((responseText = reader.readLine()) != null) {
+            response.append(responseText.trim());
+        }
+        return new JSONObject(response.toString());
+    }
+
     @NonNull
-    private static HttpURLConnection getHttpURLConnection(String filterType, List<String> previousFilter) throws URISyntaxException, IOException {
-        URI uri = new URI("http://192.168.0.69:5000/api/request-filter");
+    private static HttpURLConnection getHttpURLConnection(String jsonData, String requestURL) throws URISyntaxException, IOException {
+        URI uri = new URI(requestURL);
         URL url = uri.toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
+        connection.setConnectTimeout(timeoutMillis);
+        connection.setReadTimeout(timeoutMillis);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
-        JSONArray prevFilterArray = new JSONArray(previousFilter);
-
-        String jsonData = "{\"type\" : \""+ filterType + "\",\"previous_filter\" :" + prevFilterArray.toString() + "}";
 
         try (OutputStream stream = connection.getOutputStream()) {
             byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
