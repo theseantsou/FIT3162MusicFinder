@@ -1,28 +1,46 @@
 package com.example.musicfinder;
 
+
+
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable;
-    private TextView pageName;
-    private TextView pageDescription;
-
-    private Class<?> nextPage;
+    private String pageName;
+    private String pageDescription;
+    private Class<? extends AppCompatActivity> nextPage;
 
     private ActivityResultLauncher<Intent> launcher;
+
+    private List<AppCompatButton> buttonList;
+
+    private ProgressBar loadingAnim;
+
+    public SelectFilter(String pageTitle, String pageDesc, Class<? extends AppCompatActivity> nextPage) {
+        pageName = pageTitle;
+        pageDescription = pageDesc;
+        this.nextPage = nextPage;
+    }
 
     @Override
     public void setButtonClickable(boolean buttonClickable) {
@@ -62,20 +80,96 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
                 .forEach(b->b.setOnClickListener(v->openNextPage()));
 
         this.launcher = ActivityUtil.getResultLauncher(this);
+
+        setPageProperties();
+
+        loadingAnim = findViewById(R.id.progressBar);
+
+        buttonList = new ArrayList<>();
+        int[] buttonIds = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5};
+
+        for (int id : buttonIds) {
+            AppCompatButton button = findViewById(id);
+            buttonList.add(button);
+        }
+
+        populateButtons();
+
+        for (AppCompatButton button : buttonList) {
+            button.setOnClickListener(v->recommendationButtonClicked((AppCompatButton) v));
+        }
     }
 
-    public void setPageName(String pageName) {
-        this.pageName = (TextView) findViewById(R.id.textViewTitle);
-        this.pageName.setText(pageName);
+    public void recommendationButtonClicked(AppCompatButton button) {
+        int currentTextColor = button.getCurrentTextColor();
+
+        int textColor;
+        Drawable backgroundDrawable;
+
+        boolean isCurrentlySelected = currentTextColor == Color.WHITE;
+
+        textColor = isCurrentlySelected ? Color.BLACK : Color.WHITE;
+        backgroundDrawable = isCurrentlySelected ?
+                ContextCompat.getDrawable(this, R.drawable.white_button) :
+                ContextCompat.getDrawable(this, R.drawable.black_button);
+
+        if (isCurrentlySelected) {
+            // Unselect button (remove from previous filters)
+            ActivityUtil.removeFilter(button.getText().toString());
+        }
+        else {
+            ActivityUtil.addFilter(button.getText().toString());
+        }
+
+
+        button.setBackgroundDrawable(backgroundDrawable);
+        button.setTextColor(textColor);
+
     }
 
-    public void setPageDescription(String pageDescription) {
-        this.pageDescription = (TextView) findViewById(R.id.textViewDesc);
-        this.pageDescription.setText(pageDescription);
+    public void populateButtons() {
+        hideButtons();
+        loadingAnim.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<String> response = BackendHelper.requestFilters(pageName, ActivityUtil.getPreviousFilter());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        for (int i = 0; i < buttonList.size(); i++) {
+                            buttonList.get(i).setText(response.get(i));
+                        }
+                        showButtons();
+                        loadingAnim.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+
+
+        }).start();
     }
 
-    public void setNextPage(Class<?> nextPage) {
-        this.nextPage = nextPage;
+    public void showButtons() {
+        buttonList.forEach(button-> {
+            button.setAlpha(0f);
+            button.setVisibility(View.VISIBLE);
+            button.animate().alpha(1f).setDuration(500).setListener(null);
+        });
+    }
+
+    public void hideButtons() {
+        buttonList.forEach(button->button.setVisibility(View.INVISIBLE));
+    }
+
+    public void setPageProperties() {
+        TextView pageNameView = findViewById(R.id.textViewTitle);
+        pageNameView.setText(this.pageName);
+
+        TextView pageDescView = findViewById(R.id.textViewDesc);
+        pageDescView.setText(this.pageDescription);
     }
 
     public void closePage() {
