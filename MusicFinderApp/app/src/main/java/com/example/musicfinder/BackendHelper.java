@@ -24,10 +24,11 @@ public class BackendHelper {
     static int timeoutMillis = 10000;
     static final String baseURL = "http://192.168.0.69:5000";
 
-    public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter) {
+    public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter, List<String> previousResponse) {
         try {
             JSONArray prevFilterArray = new JSONArray(previousFilter);
-            String jsonData = "{\"amount\" : " + filterAmt + ", \"type\" : \"" + filterType + "\", \"previous_filter\" : " + prevFilterArray + "}";
+            JSONArray prevResponseArray = new JSONArray(previousResponse);
+            String jsonData = "{\"amount\" : " + filterAmt + ", \"type\" : \"" + filterType + "\", \"previous_filter\" : " + prevFilterArray + ", \"previous_response\" : " + prevResponseArray + " }";
             String requestURL = baseURL + "/api/request-filter";
             HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL);
 
@@ -48,7 +49,7 @@ public class BackendHelper {
         }
     }
 
-    public static JSONArray requestPlaylist(int amtOfSongs, List<String> filters) {
+    public static List<Song> requestPlaylist(int amtOfSongs, List<String> filters) {
         try {
             JSONArray filterArray = new JSONArray(filters);
             String jsonData = "{\"amount\" : " + amtOfSongs + ", \"filters\" : " + filterArray + "}";
@@ -57,7 +58,18 @@ public class BackendHelper {
             try {
                 JSONObject jsonObject = readResponse(connection);
                 connection.disconnect();
-                return jsonObject.getJSONArray("playlist");
+                JSONArray songsArray = jsonObject.getJSONArray("playlist");
+
+                List<Song> playlist = new ArrayList<>();
+
+                for (int i = 0; i < songsArray.length(); i++) {
+                    JSONObject songObject = songsArray.getJSONObject(i);
+                    String title = songObject.getString("title");
+                    String artist = songObject.getString("artist");
+                    Song song = new Song(title, artist);
+                    playlist.add(song);
+                }
+                return playlist;
             } catch (Exception e) {
                 return null;
             }

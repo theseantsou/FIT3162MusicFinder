@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class SelectFilter extends AppCompatActivity implements LimitButtonClickOnce {
@@ -141,13 +142,18 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     }
 
     public void populateButtons() {
-        if (isPageNotLoading() && getUnselectedButtons() > 0) {
+        if (isPageNotLoading() && !getUnselectedButtons().isEmpty()) {
             hideButtons();
             loadingAnim.setVisibility(View.VISIBLE);
             noInternetText.setVisibility(View.INVISIBLE);
             new Thread(() -> {
-                int filterAmt = getUnselectedButtons();
-                List<String> response = BackendHelper.requestFilters(filterAmt, pageName, ActivityUtil.getFilters());
+                int filterAmt = getUnselectedButtons().size();
+                List<String> prevResponse = IntStream.range(0, buttonList.size())
+                        .filter(i -> !buttonList.get(i).getText().toString().isEmpty() && !buttonActivatedList.get(i))
+                        .mapToObj(i -> buttonList.get(i).getText().toString())
+                        .collect(Collectors.toList());
+                
+                List<String> response = BackendHelper.requestFilters(filterAmt, pageName, ActivityUtil.getFilters(), prevResponse);
                 runOnUiThread(() -> {
                     if (response != null) {
                         int count = 0;
@@ -196,10 +202,12 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
     }
 
-    public int getUnselectedButtons() {
-        return (int) buttonActivatedList.stream()
-                .filter(val -> !val)
-                .count();
+    public List<AppCompatButton> getUnselectedButtons() {
+
+        return IntStream.range(0, buttonList.size())
+                .filter(i -> !buttonActivatedList.get(i))
+                .mapToObj(buttonList::get)
+                .collect(Collectors.toList());
     }
     public void setPageProperties() {
         TextView pageNameView = findViewById(R.id.textViewTitle);
@@ -211,6 +219,7 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
     public void closePage() {
         if (isPageNotLoading()) {
+            getUnselectedButtons().forEach(button->ActivityUtil.removeFilter(button.getText().toString()));
             setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
             finish();
         }

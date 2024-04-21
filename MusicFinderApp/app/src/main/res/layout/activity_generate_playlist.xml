@@ -64,6 +64,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="  Favourite"
+            android:textColor="@color/black"
             android:textAllCaps="false"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -83,6 +84,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="  Save on Spotify"
+            android:textColor="@color/black"
             android:textAllCaps="false"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -101,6 +103,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="  Regenerate Playlist"
+            android:textColor="@color/black"
             android:textAllCaps="false"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -110,8 +113,10 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/playlistRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_default="wrap"
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
