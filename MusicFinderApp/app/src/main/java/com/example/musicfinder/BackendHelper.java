@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BackendHelper {
-    static int timeoutMillis = 10000;
     static final String baseURL = "http://192.168.0.69:5000";
 
     public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter, List<String> previousResponse) {
@@ -30,7 +29,7 @@ public class BackendHelper {
             JSONArray prevResponseArray = new JSONArray(previousResponse);
             String jsonData = "{\"amount\" : " + filterAmt + ", \"type\" : \"" + filterType + "\", \"previous_filter\" : " + prevFilterArray + ", \"previous_response\" : " + prevResponseArray + " }";
             String requestURL = baseURL + "/api/request-filter";
-            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL);
+            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL, 10000);
 
             try {
                 JSONObject jsonObject = readResponse(connection);
@@ -54,7 +53,7 @@ public class BackendHelper {
             JSONArray filterArray = new JSONArray(filters);
             String jsonData = "{\"amount\" : " + amtOfSongs + ", \"filters\" : " + filterArray + "}";
             String requestURL = baseURL + "/api/request-playlist";
-            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL);
+            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL, 30000);
             try {
                 JSONObject jsonObject = readResponse(connection);
                 connection.disconnect();
@@ -64,11 +63,12 @@ public class BackendHelper {
 
                 for (int i = 0; i < songsArray.length(); i++) {
                     JSONObject songObject = songsArray.getJSONObject(i);
-                    String title = songObject.getString("title");
+                    String title = songObject.getString("track");
                     String artist = songObject.getString("artist");
                     Song song = new Song(title, artist);
                     playlist.add(song);
                 }
+                System.out.println(playlist);
                 return playlist;
             } catch (Exception e) {
                 return null;
@@ -91,7 +91,7 @@ public class BackendHelper {
     }
 
     @NonNull
-    private static HttpURLConnection getHttpURLConnection(String jsonData, String requestURL) throws URISyntaxException, IOException {
+    private static HttpURLConnection getHttpURLConnection(String jsonData, String requestURL, int timeoutMillis) throws URISyntaxException, IOException {
         URI uri = new URI(requestURL);
         URL url = uri.toURL();
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

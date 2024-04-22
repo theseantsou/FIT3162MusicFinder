@@ -56,7 +56,6 @@ public class GeneratePlaylist extends AppCompatActivity {
                 if (songsArray != null) {
                     adapter.setSongs(songsArray);
                     recyclerView.setAdapter(adapter);
-
                 }
             });
 
