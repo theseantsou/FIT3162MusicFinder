@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -118,6 +120,14 @@ public class ActivityUtil {
                     }
                 }
         );
+    }
+
+    public static boolean isPageNotLoading(ProgressBar loadingAnim) {
+        return loadingAnim.getVisibility() == View.INVISIBLE;
+    }
+
+    public static boolean hasNoInternetWarning(TextView noInternetText) {
+        return noInternetText.getVisibility() == View.INVISIBLE;
     }
 
 

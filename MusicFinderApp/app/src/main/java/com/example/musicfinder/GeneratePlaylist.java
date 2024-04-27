@@ -3,17 +3,17 @@ package com.example.musicfinder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,9 @@ public class GeneratePlaylist extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private SongAdapter adapter;
+
+    private ProgressBar loadingAnim;
+    private TextView noInternetTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +43,24 @@ public class GeneratePlaylist extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.playlistRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SongAdapter(new ArrayList<>()); // Empty list initially
+        adapter = new SongAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
+
+        loadingAnim = findViewById(R.id.progressBarGenPlaylist);
+        noInternetTextView = findViewById(R.id.textViewNoInternet);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                openHomePage();
+            }
+        });
 
         generatePlaylist();
     }
 
     private void generatePlaylist() {
+        loadingAnim.setVisibility(View.VISIBLE);
+        noInternetTextView.setVisibility(View.INVISIBLE);
         new Thread(() -> {
             int numberOfSongs = ActivityUtil.getAmountOfSongs();
             List<String> filters = ActivityUtil.getFilters();
@@ -56,6 +70,11 @@ public class GeneratePlaylist extends AppCompatActivity {
                 if (songsArray != null) {
                     adapter.setSongs(songsArray);
                     recyclerView.setAdapter(adapter);
+                    loadingAnim.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    loadingAnim.setVisibility(View.INVISIBLE);
+                    noInternetTextView.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -63,8 +82,11 @@ public class GeneratePlaylist extends AppCompatActivity {
     }
 
     private void openHomePage() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (ActivityUtil.isPageNotLoading(loadingAnim)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
     }
 }

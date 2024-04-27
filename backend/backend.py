@@ -44,12 +44,14 @@ def request_filter():
 
     if previous_filters:
         previous_filters_str = ", ".join(previous_filters)
-        prompt += f" that fits any of the following categories excluding those provided in the input: {previous_filters_str}."
+        prompt += f" that fits any of the following categories excluding those provided in the input: {
+            previous_filters_str}."
 
-    # if previous_response:
+    if previous_response:
 
-        # previous_response_str = ", ".join(previous_response)
-        # prompt += f" Ensure a diverse selection that differs from the previous response: {previous_response_str}"
+        previous_response_str = ", ".join(previous_response)
+        prompt += f" Ensure a diverse selection that differs from the previous response: {
+            previous_response_str}"
 
     print(prompt)
 
@@ -57,9 +59,11 @@ def request_filter():
         " Ensure the response contains only the JSON formatted response, with no additional text. Example response format: " + \
         "{ \"filters\": [\"" + filter_type + "_1\", \"" + filter_type + "_2\", \"" + filter_type + "_3\", \"" + \
         filter_type + "_4\", \"" + filter_type + "_5\"] } Please note that the example response contains placeholders for " + filter_type + \
-        " and should be replaced with appropriate values based on the given categories. Ensure that the time period filter is represented in the decade and in the format XXXXs, where X indicates digits 0-9. Also ensure that there are no duplicate values." + \
+        " and should be replaced with appropriate values based on the given categories. " + \
+        "Ensure that the time period filter is represented in the decade and in the format YYYYs (i.e. 1980s, 2000s, 2010s etc). " + \
+        "Also ensure that there are no duplicate values." + \
         "Also ensure that you dont give me the filters that I gave you as a response. " + \
-        f"Please ensure that you give me artist names when I request for Artist filter type"
+        f"Please ensure that you give me artist names when I request for Artist filter type (E.g. Taylor Swift, Ed Sheeran, etc)"
 
     response = request_openAI(prompt, 0.5, instruction)
     print(response)
@@ -72,33 +76,13 @@ def request_playlist():
     song_amt = request.json.get("amount")
     filters = request.json.get("filters")
 
-    # filters_str = " that fits any of the following category:" if len(
-    #     filters) else ""
-
-    # for index, item in enumerate(filters):
-    #     filters_str += (" " if index == 0 else ", ") + item
-
-    # prompt = ""
-    # prompt = "Give me a playlist of exactly *" + \
-    #     str(song_amt) + "* songs" + filters_str
-
-    # instruction = "Generate a JSON formatted response with the following example format: " + \
-    #     "{\"playlist\": [ {\"artist\": \"song_artist\", \"track\": \"track_title\" }, {\"artist\": \"song_artist\", \"track\": \"track_title\" }, ... ]}" + \
-    #     "Ensure the response contains only the JSON formatted response, with no additional text. Please fill in the \"artist\" and \"track\" fields for each song" + \
-    #     "Ensure that There are no duplicate songs in the playlist." + \
-    #     "Also ensure that you dont give me the filters that I gave you as a response" + \
-    #     "Ensure that the order of songs in the playlist is randomized for each request." + \
-    #     "Ensure that you include similar artists to the provided ones to diversify the playlist" + \
-    #     "Please ensure that there are exactly *" + \
-    #     str(song_amt) + "* songs in the generated response"
-
     filters_str = " that fits any of the following categories:" if len(
         filters) else ""
 
     for index, item in enumerate(filters):
         filters_str += (" " if index == 0 else ", ") + item
 
-    prompt = "Give me a playlist of exactly *" + \
+    prompt = "Give me a playlist of only *exactly* *" + \
         str(song_amt) + "* songs" + filters_str
 
     instruction = (
@@ -115,7 +99,7 @@ def request_playlist():
         "Exclude the provided filters from the response to diversify the playlist.\n"
         "Randomize the order of songs in the playlist for each request.\n"
         "Include similar artists to the provided ones to ensure playlist diversity.\n"
-        "Ensure that the response contains exactly *" +
+        "Ensure that the response only contains *exactly* *" +
         str(song_amt) + "* songs."
     )
 

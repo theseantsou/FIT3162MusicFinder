@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BackendHelper {
-    static final String baseURL = "http://192.168.0.69:5000";
+    static final String baseURL = "http://192.168.43.189:5000";
 
     public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter, List<String> previousResponse) {
         try {
@@ -29,7 +29,7 @@ public class BackendHelper {
             JSONArray prevResponseArray = new JSONArray(previousResponse);
             String jsonData = "{\"amount\" : " + filterAmt + ", \"type\" : \"" + filterType + "\", \"previous_filter\" : " + prevFilterArray + ", \"previous_response\" : " + prevResponseArray + " }";
             String requestURL = baseURL + "/api/request-filter";
-            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL, 10000);
+            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL, 30000);
 
             try {
                 JSONObject jsonObject = readResponse(connection);
@@ -51,17 +51,17 @@ public class BackendHelper {
     public static List<Song> requestPlaylist(int amtOfSongs, List<String> filters) {
         try {
             JSONArray filterArray = new JSONArray(filters);
-            String jsonData = "{\"amount\" : " + amtOfSongs + ", \"filters\" : " + filterArray + "}";
+            String jsonData = "{\"amount\" : " + (amtOfSongs + 5) + ", \"filters\" : " + filterArray + "}";
             String requestURL = baseURL + "/api/request-playlist";
-            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL, 30000);
+            HttpURLConnection connection = getHttpURLConnection(jsonData, requestURL, 10000000);
             try {
                 JSONObject jsonObject = readResponse(connection);
                 connection.disconnect();
                 JSONArray songsArray = jsonObject.getJSONArray("playlist");
 
                 List<Song> playlist = new ArrayList<>();
-
-                for (int i = 0; i < songsArray.length(); i++) {
+                int minSongAmt = Math.min(songsArray.length(), amtOfSongs);
+                for (int i = 0; i < minSongAmt; i++) {
                     JSONObject songObject = songsArray.getJSONObject(i);
                     String title = songObject.getString("track");
                     String artist = songObject.getString("artist");

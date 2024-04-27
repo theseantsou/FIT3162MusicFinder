@@ -100,7 +100,7 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
     public void recommendationButtonClicked(AppCompatButton button) {
         int buttonIndex = buttonList.indexOf(button);
-        if (buttonIndex != -1 && isPageNotLoading()) {
+        if (buttonIndex != -1 && ActivityUtil.isPageNotLoading(loadingAnim)) {
             int textColor;
             Drawable backgroundDrawable;
 
@@ -142,7 +142,7 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     }
 
     public void populateButtons() {
-        if (isPageNotLoading() && !getUnselectedButtons().isEmpty()) {
+        if (ActivityUtil.isPageNotLoading(loadingAnim) && !getUnselectedButtons().isEmpty()) {
             hideButtons();
             loadingAnim.setVisibility(View.VISIBLE);
             noInternetText.setVisibility(View.INVISIBLE);
@@ -218,7 +218,7 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     }
 
     public void closePage() {
-        if (isPageNotLoading()) {
+        if (ActivityUtil.isPageNotLoading(loadingAnim)) {
             getUnselectedButtons().forEach(button->ActivityUtil.removeFilter(button.getText().toString()));
             setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
             finish();
@@ -231,7 +231,7 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
      * Button click event to open next page depending on the count
      */
     public void openNextPage() {
-        if (isButtonClickable && isPageNotLoading() && hasNoInternetWarning()) {
+        if (isButtonClickable && ActivityUtil.isPageNotLoading(loadingAnim) && ActivityUtil.hasNoInternetWarning(noInternetText)) {
             // open the page where prompts user to input amount of songs
             Intent intent = new Intent(this, nextPage);
             launcher.launch(intent);
@@ -240,12 +240,6 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
 
     }
 
-    public boolean isPageNotLoading() {
-        return loadingAnim.getVisibility() == View.INVISIBLE;
-    }
 
-    public boolean hasNoInternetWarning() {
-        return noInternetText.getVisibility() == View.INVISIBLE;
-    }
 
 }
