@@ -64,7 +64,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="50dp"
             android:layout_marginStart="50dp"
-            android:background="@drawable/generate_playlist_button"
+            android:background="@drawable/black_button"
             android:textAllCaps="false"
             android:textSize="15sp"
             android:text="@string/generate_playlist"
