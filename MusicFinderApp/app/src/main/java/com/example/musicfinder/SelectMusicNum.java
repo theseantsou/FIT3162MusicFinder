@@ -21,6 +21,8 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
         isButtonClickable = buttonClickable;
     }
 
+    private NumberPicker numberPicker;
+    private final String[] displayedValues = {"10", "20", "30", "40", "50"};
     private ActivityResultLauncher<Intent> launcher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +35,8 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
             return insets;
         });
 
-        NumberPicker numberPicker = findViewById(R.id.numberPicker);
+        numberPicker = findViewById(R.id.numberPicker);
 
-        final String[] displayedValues = {"10", "20", "30", "40", "50"};
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(displayedValues.length - 1);
         numberPicker.setDisplayedValues(displayedValues);
@@ -64,10 +65,10 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
     }
 
     public void openPlaylistPage() {
-        // Todo: have a playlist generation page
         if (isButtonClickable) {
             isButtonClickable = false;
             Intent intent = new Intent(this, GeneratePlaylist.class);
+            ActivityUtil.setAmountOfSongs(Integer.parseInt(displayedValues[numberPicker.getValue()]));
             launcher.launch(intent);
         }
 
