@@ -36,10 +36,15 @@ public class Playlist {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder output = new StringBuilder();
-        for (Song song: songs) {
+        StringBuilder output = new StringBuilder("Playlist (\n");
+        for (Song song: this.songs) {
             output.append(song.toString()).append("\n");
         }
+        output.append(")\nFilters (\n");
+        for (String filter : this.filters) {
+            output.append(filter).append("\n");
+        }
+        output.append(")");
         return output.toString();
     }
 }
