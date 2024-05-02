@@ -7,10 +7,18 @@ import java.util.List;
 
 
 public class Playlist {
+<<<<<<< HEAD
     private String title = "";
     private List<Song> songs = null;
     private List<String> filters = new ArrayList<>();
     private long playlistID = -1;
+=======
+    private List<Song> songs = null;
+    private List<String> filters = new ArrayList<>();
+    public Playlist() {
+
+    }
+>>>>>>> d31949b (base database creation logic)
 
     public List<Song> getSongs() {
         return this.songs;
@@ -28,6 +36,7 @@ public class Playlist {
         this.filters = filters;
     }
 
+<<<<<<< HEAD
     public void setTitle(String title) {
         this.title = title;
     }
@@ -44,6 +53,8 @@ public class Playlist {
         this.playlistID = playlistID;
     }
 
+=======
+>>>>>>> d31949b (base database creation logic)
     public void addSongToPlaylist(Song song) {
         this.songs.add(song);
     }
@@ -51,6 +62,7 @@ public class Playlist {
     @NonNull
     @Override
     public String toString() {
+<<<<<<< HEAD
         StringBuilder output = new StringBuilder("Playlist (\n");
         for (Song song: this.songs) {
             output.append(song.toString()).append("\n");
@@ -64,4 +76,12 @@ public class Playlist {
     }
 
 
+=======
+        StringBuilder output = new StringBuilder();
+        for (Song song: songs) {
+            output.append(song.toString()).append("\n");
+        }
+        return output.toString();
+    }
+>>>>>>> d31949b (base database creation logic)
 }
