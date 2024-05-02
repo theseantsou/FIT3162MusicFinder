@@ -64,11 +64,12 @@ public class GeneratePlaylist extends AppCompatActivity {
         new Thread(() -> {
             int numberOfSongs = ActivityUtil.getAmountOfSongs();
             List<String> filters = ActivityUtil.getFilters();
-            List<Song> songsArray = BackendHelper.requestPlaylist(numberOfSongs, filters);
+            Playlist playlist = BackendHelper.requestPlaylist(numberOfSongs, filters);
 
             runOnUiThread(()-> {
-                if (songsArray != null) {
-                    adapter.setSongs(songsArray);
+                assert playlist != null;
+                if (playlist.getSongs() != null) {
+                    adapter.setSongs(playlist.getSongs());
                     recyclerView.setAdapter(adapter);
                     loadingAnim.setVisibility(View.INVISIBLE);
                 }

@@ -48,7 +48,7 @@ public class BackendHelper {
         }
     }
 
-    public static List<Song> requestPlaylist(int amtOfSongs, List<String> filters) {
+    public static Playlist requestPlaylist(int amtOfSongs, List<String> filters) {
         try {
             JSONArray filterArray = new JSONArray(filters);
             String jsonData = "{\"amount\" : " + (amtOfSongs + 5) + ", \"filters\" : " + filterArray + "}";
@@ -59,14 +59,15 @@ public class BackendHelper {
                 connection.disconnect();
                 JSONArray songsArray = jsonObject.getJSONArray("playlist");
 
-                List<Song> playlist = new ArrayList<>();
+                Playlist playlist = new Playlist();
+                playlist.setFilters(filters);
                 int minSongAmt = Math.min(songsArray.length(), amtOfSongs);
                 for (int i = 0; i < minSongAmt; i++) {
                     JSONObject songObject = songsArray.getJSONObject(i);
                     String title = songObject.getString("track");
                     String artist = songObject.getString("artist");
                     Song song = new Song(title, artist);
-                    playlist.add(song);
+                    playlist.addSongToPlaylist(song);
                 }
                 System.out.println(playlist);
                 return playlist;

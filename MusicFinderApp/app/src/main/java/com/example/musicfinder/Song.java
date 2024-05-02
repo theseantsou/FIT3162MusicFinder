@@ -1,5 +1,7 @@
 package com.example.musicfinder;
 
+import androidx.annotation.NonNull;
+
 public class Song {
     private final String title;
     private final String artist;
@@ -15,5 +17,10 @@ public class Song {
 
     public String getArtist() {
         return artist;
+    }
+
+    @Override
+    public String toString() {
+        return this.title + " by " + this.artist;
     }
 }
