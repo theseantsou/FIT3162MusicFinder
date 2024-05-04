@@ -3,6 +3,7 @@ package com.example.musicfinder;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.View;
@@ -68,15 +69,12 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
         if (isButtonClickable) {
             isButtonClickable = false; // Disable button
 
+//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(BackendHelper.baseURL + "/login"));
+//            launcher.launch(intent);
             // Launch the SelectFilter page
             Intent intent = new Intent(this, SelectMood.class);
             launcher.launch(intent);
         }
     }
-
-
-
-
-
 
 }

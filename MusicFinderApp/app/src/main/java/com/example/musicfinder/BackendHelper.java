@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BackendHelper {
-    static final String baseURL = "http://192.168.43.189:5000";
+    public static final String baseURL = "http://192.168.43.189:5000";
 
     public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter, List<String> previousResponse) {
         try {
@@ -107,4 +107,8 @@ public class BackendHelper {
         }
         return connection;
     }
+
+
+
+
 }

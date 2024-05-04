@@ -1,119 +1,32 @@
-from flask import Flask, request, jsonify, redirect, session
+# Import Libraries
+import os
+import base64
 from requests import post, get
-from openai import OpenAI
-from config import *
 import json
+from flask import Flask, redirect, request, jsonify, session
 import urllib.parse
 import datetime
 
+# Name of Flask app and Secret Key
 app = Flask(__name__)
 app.secret_key = 'AASDasd1345t6dcycy7-y78g87gf-FYTfyuf78'
 
+# URLs and IDs
+CLIENT_ID = "af3562ebce014ac0bee41e382e861f5b"
+CLIENT_SECRET = "75576491633240049d1c0483232cc865"
+REDIRECT_URI = "http://localhost:5000/callback"
+AUTH_URL = "https://accounts.spotify.com/authorize"
+TOKEN_URL = "https://accounts.spotify.com/api/token"
+API_BASE_URL = "https://api.spotify.com"
 
-def request_openAI(prompt, temperature=0.2, instruction="Reply in json format only without adding anything else"):
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    messages = [
-        {
-            "role": "system",
-            "content": instruction
-        },
-        {
-            "role": "user",
-            "content": prompt,
-        }
-    ]
-    try:
-
-        response = client.chat.completions.create(
-            model=GPT_MODEL,
-            messages=messages,
-            temperature=temperature
-        )
-        text = response.choices[0].message.content.strip()
-
-        return text
-
-    except Exception as e:
-        return None
+# Main App Page
 
 
-@app.route("/api/request-filter", methods=["POST"])
-def request_filter():
-    filter_amt = request.json.get("amount")
-    filter_type = request.json.get("type")
-    previous_filters = request.json.get("previous_filter")
-    previous_response = request.json.get("previous_response")
+@app.route('/')
+def index():
+    return "Welcome <a href='/login'>Login Here</a>"
 
-    prompt = f"Please provide exactly *{filter_amt}* musical {filter_type}"
-
-    if previous_filters:
-        previous_filters_str = ", ".join(previous_filters)
-        prompt += f" that fits any of the following categories excluding those provided in the input: {
-            previous_filters_str}."
-
-    if previous_response:
-
-        previous_response_str = ", ".join(previous_response)
-        prompt += f" Ensure a diverse selection that differs from the previous response: {
-            previous_response_str}"
-
-    print(prompt)
-
-    instruction = "Generate a JSON formatted response with the \"filters\" key and a list of values" + \
-        " Ensure the response contains only the JSON formatted response, with no additional text. Example response format: " + \
-        "{ \"filters\": [\"" + filter_type + "_1\", \"" + filter_type + "_2\", \"" + filter_type + "_3\", \"" + \
-        filter_type + "_4\", \"" + filter_type + "_5\"] } Please note that the example response contains placeholders for " + filter_type + \
-        " and should be replaced with appropriate values based on the given categories. " + \
-        "Ensure that the time period filter is represented in the decade and in the format YYYYs (i.e. 1980s, 2000s, 2010s etc). " + \
-        "Also ensure that there are no duplicate values." + \
-        "Also ensure that you dont give me the filters that I gave you as a response. " + \
-        f"Please ensure that you give me artist names when I request for Artist filter type (E.g. Taylor Swift, Ed Sheeran, etc)" + \
-        f"Please ensure that the response "
-
-    response = request_openAI(prompt, 0.5, instruction)
-    print(response)
-    parsed_object = json.loads(response)
-    return jsonify(parsed_object)
-
-
-@app.route("/api/request-playlist", methods=["POST"])
-def request_playlist():
-    song_amt = request.json.get("amount")
-    filters = request.json.get("filters")
-
-    filters_str = " that fits any of the following categories:" if len(
-        filters) else ""
-
-    for index, item in enumerate(filters):
-        filters_str += (" " if index == 0 else ", ") + item
-
-    prompt = "Give me a playlist of only *exactly* *" + \
-        str(song_amt) + "* songs" + filters_str
-
-    instruction = (
-        "Generate a JSON-formatted response with the following format: \n"
-        "{\n"
-        '  "playlist": [\n'
-        '    {"artist": "song_artist", "track": "track_title"},\n'
-        '    {"artist": "song_artist", "track": "track_title"},\n'
-        '    ...\n'
-        '  ]\n'
-        "}\n"
-        "Ensure that the response contains only the JSON-formatted playlist, without additional text. Please provide the artist and track details for each song.\n"
-        "Ensure that there are no duplicate songs in the playlist.\n"
-        "Exclude the provided filters from the response to diversify the playlist.\n"
-        "Randomize the order of songs in the playlist for each request.\n"
-        "Include similar artists to the provided ones to ensure playlist diversity.\n"
-        "Ensure that the response only contains *exactly* *" +
-        str(song_amt) + "* songs."
-    )
-
-    response = request_openAI(prompt, 0.7, instruction)
-    parsed_object = json.loads(response)
-    print(parsed_object)
-    return jsonify(parsed_object)
-
-# Spotify backend
+# Login App Page
 
 
 @app.route('/login')
@@ -172,14 +85,13 @@ def callback():
     session['expires_at'] = datetime.datetime.now().timestamp() + \
         token_info['expires_in']
 
-    return
+    return redirect('/populate_playlist')
 
 # Add songs to playlist
 
 
 @app.route('/populate_playlist')
 def populate_user_playlist():
-    songlist = request.json.get("playlist")
 
     # Define access token, if not get it
     access_token = session.get('access_token')
@@ -194,7 +106,8 @@ def populate_user_playlist():
     headers = {'Authorization': f'Bearer {access_token}'}
 
     # Define list of songs in Json, and playlist name
-
+    songlist = [{'artist': 'The Killers', 'track': 'Mr. Brightside'}, {'artist': 'Calvin Harris', 'track': 'Feel So Close'}, {'artist': 'Vampire Weekend', 'track': 'A-Punk'}, {'artist': 'ODESZA', 'track': 'Say My Name (feat. Zyra)'}, {'artist': 'The Strokes', 'track': 'Last Nite'}, {'artist': 'Taylor Swift', 'track': 'Shake It Off'}, {'artist': 'Kanye West', 'track': 'Stronger'}, {'artist': 'Lana Del Rey', 'track': 'Summertime Sadness'}, {'artist': 'Mumford & Sons', 'track': 'I Will Wait'}, {'artist': 'Drake', 'track': 'Hotline Bling'}, {'artist': 'Foster The People', 'track': 'Pumped Up Kicks'}, {'artist': 'Disclosure', 'track': 'Latch (feat. Sam Smith)'}, {'artist': 'Two Door Cinema Club', 'track': 'What You Know'}, {'artist': 'Charli XCX', 'track': 'Boom Clap'}, {'artist': 'Bastille', 'track': 'Pompeii'}, {'artist': 'Kygo', 'track': 'Stole the Show (feat. Parson James)'}, {'artist': 'Arctic Monkeys', 'track': 'Do I Wanna Know?'}, {'artist': 'Billie Eilish', 'track': 'bad guy'}, {'artist': 'Twenty One Pilots', 'track': 'Stressed Out'}, {'artist': 'The Chainsmokers', 'track': 'Closer (feat. Halsey)'}, {'artist': 'Paramore', 'track': "Ain't It Fun"}, {'artist': 'Sam Smith', 'track': 'Stay With Me'}, {'artist': 'MGMT', 'track': 'Kids'}, {'artist': 'Dua Lipa', 'track': "Don't Start Now"}, {'artist': 'Imagine Dragons', 'track': 'Radioactive'}, {
+        'artist': 'Troye Sivan', 'track': 'My My My!'}, {'artist': 'Hozier', 'track': 'Take Me to Church'}, {'artist': 'Rihanna', 'track': 'We Found Love (feat. Calvin Harris)'}, {'artist': 'Fleet Foxes', 'track': 'Mykonos'}, {'artist': 'Kendrick Lamar', 'track': 'HUMBLE.'}, {'artist': 'Florence + The Machine', 'track': 'Dog Days Are Over'}, {'artist': 'Alessia Cara', 'track': 'Here'}, {'artist': 'Ed Sheeran', 'track': 'Shape of You'}, {'artist': 'SZA', 'track': 'Good Days'}, {'artist': 'Maroon 5', 'track': 'Sugar'}, {'artist': 'Lorde', 'track': 'Royals'}, {'artist': 'Khalid', 'track': 'Young Dumb & Broke'}, {'artist': 'The 1975', 'track': 'Somebody Else'}, {'artist': 'M83', 'track': 'Midnight City'}, {'artist': 'Lewis Capaldi', 'track': 'Someone You Loved'}, {'artist': 'Panic! At The Disco', 'track': 'High Hopes'}, {'artist': 'Ariana Grande', 'track': 'thank u, next'}, {'artist': 'Coldplay', 'track': 'Viva La Vida'}, {'artist': 'Childish Gambino', 'track': 'Redbone'}, {'artist': 'Tame Impala', 'track': 'The Less I Know The Better'}, {'artist': 'Halsey', 'track': 'Without Me'}, {'artist': 'Vance Joy', 'track': 'Riptide'}, {'artist': 'Travis Scott', 'track': 'SICKO MODE'}, {'artist': 'Maggie Rogers', 'track': 'Light On'}, {'artist': 'Beyonce', 'track': 'Crazy in Love (feat. Jay-Z)'}]
     playlist_name = "Music Finder"
 
     # Clean songs of apostrophes
@@ -246,11 +159,8 @@ def populate_user_playlist():
                 if character == ")":
                     bracket_dash_flag = False
 
-            search_params = {
-                'q': f'artist:{track["artist"]} track:{track["track"]}',
-                'type': 'track',
-                'limit': 1
-            }
+            search_params = {'q': f'artist:{track["artist"]} track:{
+                newstring}', 'type': 'track', 'limit': 1}
             track_search_response = get(
                 track_search_url, headers=headers, params=search_params)
             tracks_data = track_search_response.json()['tracks']['items']
@@ -268,6 +178,28 @@ def populate_user_playlist():
         print(add_track_response.status_code)
 
     return f'Music added to {playlist_name}'
+
+# Unused - May have to use for future features -
+
+
+@app.route('/playlists')
+def get_playlists():
+
+    if 'access_token' not in session:
+        return redirect('/login')
+
+    if datetime.datetime.now().timestamp() > session['expires_at']:
+        return redirect('/refresh_token')
+
+    headers = {
+        'Authorization': f'Bearer {session['access_token']}'
+    }
+
+    response = get(API_BASE_URL + '/v1/me/playlists', headers=headers)
+
+    playlists = response.json()
+
+    return jsonify(playlists)
 
 
 @app.route('/refresh_token')
@@ -293,5 +225,5 @@ def refresh_token():
         return redirect('/populate_playlist')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

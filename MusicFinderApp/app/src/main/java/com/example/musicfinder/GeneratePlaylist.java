@@ -1,6 +1,7 @@
 package com.example.musicfinder;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -56,6 +58,16 @@ public class GeneratePlaylist extends AppCompatActivity {
         });
 
         generatePlaylist();
+
+        AppCompatButton savePlaylistButton = findViewById(R.id.saveSpotifyButton);
+        savePlaylistButton.setOnClickListener(v -> {
+            if (ActivityUtil.isPageNotLoading(loadingAnim)) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(BackendHelper.baseURL + "/populate_playlist?playlist=" + adapter.getSongs()));
+                startActivity(intent);
+
+            }
+
+        });
     }
 
     private void generatePlaylist() {

@@ -46,6 +46,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         songs = newSongs;
     }
 
+    public List<Song> getSongs() {return songs;}
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView songNumTextView, songTitleTextView, songArtistTextView;
         ImageView playButtonImageView;
