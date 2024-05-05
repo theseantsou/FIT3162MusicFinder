@@ -1,6 +1,8 @@
-package com.example.musicfinder;
+package com.example.musicfinder.utils;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.musicfinder.pages.FavouritePage;
+import com.example.musicfinder.pages.HistoryPage;
+import com.example.musicfinder.LimitButtonClickOnce;
+import com.example.musicfinder.R;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -41,6 +47,8 @@ public class ActivityUtil {
     public static void removeFilter(String filter) {
         filters.remove(filter);
     }
+
+    public static void emptyFilter() { filters.clear(); }
 
     public static List<String> getFilters() {
         return filters;
@@ -128,6 +136,26 @@ public class ActivityUtil {
 
     public static boolean hasNoInternetWarning(TextView noInternetText) {
         return noInternetText.getVisibility() == View.INVISIBLE;
+    }
+
+    public static String getEmailFromSharedPref(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file_key), Context.MODE_PRIVATE);
+        String spotifyEmail = sharedPreferences.getString("email", null);
+
+        if (spotifyEmail != null) {
+            return spotifyEmail;
+        }
+        else {
+            return "";
+        }
+
+    }
+
+    public static void setEmailInSharedPref(Context context, String email) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("email", email);
+        editor.apply();
     }
 
 

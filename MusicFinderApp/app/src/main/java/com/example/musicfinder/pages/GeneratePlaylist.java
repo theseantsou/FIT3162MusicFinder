@@ -1,7 +1,6 @@
-package com.example.musicfinder;
+package com.example.musicfinder.pages;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -10,12 +9,18 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.musicfinder.Playlist;
+import com.example.musicfinder.R;
+import com.example.musicfinder.Song;
+import com.example.musicfinder.SongAdapter;
+import com.example.musicfinder.utils.ActivityUtil;
+import com.example.musicfinder.utils.BackendHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,16 +63,6 @@ public class GeneratePlaylist extends AppCompatActivity {
         });
 
         generatePlaylist();
-
-        AppCompatButton savePlaylistButton = findViewById(R.id.saveSpotifyButton);
-        savePlaylistButton.setOnClickListener(v -> {
-            if (ActivityUtil.isPageNotLoading(loadingAnim)) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(BackendHelper.baseURL + "/populate_playlist?playlist=" + adapter.getSongs()));
-                startActivity(intent);
-
-            }
-
-        });
     }
 
     private void generatePlaylist() {
@@ -76,7 +71,16 @@ public class GeneratePlaylist extends AppCompatActivity {
         new Thread(() -> {
             int numberOfSongs = ActivityUtil.getAmountOfSongs();
             List<String> filters = ActivityUtil.getFilters();
-            List<Song> songsArray = BackendHelper.requestPlaylist(numberOfSongs, filters);
+            Playlist playlist = BackendHelper.requestPlaylist(numberOfSongs, filters);
+            List<Song> songsArray;
+            if (playlist != null) {
+                 songsArray = playlist.getSongs();
+            } else {
+                songsArray = null;
+            }
+
+            // TODO: Add to database history
+
 
             runOnUiThread(()-> {
                 if (songsArray != null) {

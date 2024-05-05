@@ -20,20 +20,7 @@
     <string name="song_title_example">Song Title</string>
     <string name="artist_name_example">Artist Name</string>
     <string name="numbering_example">1.</string>
-
-    <string-array name="title_name">
-        <item>Occasion or Mood</item>
-        <item>Genre</item>
-        <item>Time Period</item>
-        <item>Artist</item>
-    </string-array>
-
-    <string-array name="page_desc">
-        <item>Customise your playlist for specific situations or emotional states.</item>
-        <item>It\'s time to define the genre you\'re interested in.</item>
-        <item>Specify the time period you prefer.</item>
-        <item>Start your music journey by selecting a specific artist or band.</item>
-    </string-array>
+    <string name="pref_file_key">MyPref</string>
 
 
 </resources>

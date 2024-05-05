@@ -1,4 +1,4 @@
-package com.example.musicfinder;
+package com.example.musicfinder.pages;
 
 
 
@@ -19,6 +19,11 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.musicfinder.LimitButtonClickOnce;
+import com.example.musicfinder.R;
+import com.example.musicfinder.utils.ActivityUtil;
+import com.example.musicfinder.utils.BackendHelper;
 
 import java.util.ArrayList;
 import java.util.List;

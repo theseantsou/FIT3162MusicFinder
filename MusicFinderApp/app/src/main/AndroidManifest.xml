@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,24 +13,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicFinder"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SelectMood"
+            android:name=".pages.SpotifyWebActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectGenre"
+            android:name=".pages.SelectMood"
             android:exported="false" />
         <activity
-            android:name=".SelectPeriod"
+            android:name=".pages.SelectGenre"
             android:exported="false" />
         <activity
-            android:name=".SelectArtist"
+            android:name=".pages.SelectPeriod"
             android:exported="false" />
         <activity
-            android:name=".GeneratePlaylist"
+            android:name=".pages.SelectArtist"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".pages.GeneratePlaylist"
+            android:exported="false" />
+        <activity
+            android:name=".pages.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,16 +43,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SelectFilter"
+            android:name=".pages.SelectFilter"
             android:exported="false" />
         <activity
-            android:name=".SelectMusicNum"
+            android:name=".pages.SelectMusicNum"
             android:exported="false" />
         <activity
-            android:name=".HistoryPage"
+            android:name=".pages.HistoryPage"
             android:exported="false" />
         <activity
-            android:name=".FavouritePage"
+            android:name=".pages.FavouritePage"
             android:exported="false" />
     </application>
 

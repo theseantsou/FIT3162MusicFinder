@@ -1,8 +1,6 @@
-package com.example.musicfinder;
+package com.example.musicfinder.pages;
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class SelectGenre extends SelectFilter {
 

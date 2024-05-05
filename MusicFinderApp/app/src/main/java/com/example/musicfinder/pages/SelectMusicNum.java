@@ -1,4 +1,4 @@
-package com.example.musicfinder;
+package com.example.musicfinder.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class SelectMusicNum extends AppCompatActivity implements LimitButtonClickOnce{
+import com.example.musicfinder.LimitButtonClickOnce;
+import com.example.musicfinder.R;
+import com.example.musicfinder.utils.ActivityUtil;
+
+public class SelectMusicNum extends AppCompatActivity implements LimitButtonClickOnce {
     private boolean isButtonClickable = true;
 
     @Override

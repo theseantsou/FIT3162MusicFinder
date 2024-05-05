@@ -1,4 +1,4 @@
-package com.example.musicfinder;
+package com.example.musicfinder.pages;
 
 import android.os.Bundle;
 
