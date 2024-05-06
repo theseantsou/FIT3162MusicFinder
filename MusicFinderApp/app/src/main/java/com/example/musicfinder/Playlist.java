@@ -10,6 +10,7 @@ public class Playlist {
     private String title = "";
     private List<Song> songs = null;
     private List<String> filters = new ArrayList<>();
+    private long playlistID = -1;
 
     public List<Song> getSongs() {
         return this.songs;
@@ -35,6 +36,14 @@ public class Playlist {
         return this.title;
     }
 
+    public long getPlaylistID() {
+        return playlistID;
+    }
+
+    public void setPlaylistID(long playlistID) {
+        this.playlistID = playlistID;
+    }
+
     public void addSongToPlaylist(Song song) {
         this.songs.add(song);
     }
@@ -53,4 +62,6 @@ public class Playlist {
         output.append(")");
         return output.toString();
     }
+
+
 }

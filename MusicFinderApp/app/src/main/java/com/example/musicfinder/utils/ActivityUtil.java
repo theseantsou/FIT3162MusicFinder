@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.musicfinder.UseSpotify;
 import com.example.musicfinder.pages.FavouritePage;
 import com.example.musicfinder.pages.HistoryPage;
 import com.example.musicfinder.LimitButtonClickOnce;
@@ -27,7 +28,8 @@ import java.util.List;
 
 public class ActivityUtil {
 
-    public static final int REQUEST_CODE_SELECT_ARTIST = 1001;
+    public static final int RESULT_CODE_SUCCESSFUL_LOGIN = 1001;
+    public static final int RESULT_CODE_FAILED_LOGIN = 1002;
     private static final List<String> filters = new ArrayList<>();
 
     private static int AmountOfSongs = 0;
@@ -123,9 +125,17 @@ public class ActivityUtil {
         return activity.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == REQUEST_CODE_SELECT_ARTIST) {
+
                         ((LimitButtonClickOnce) activity).setButtonClickable(true);
-                    }
+
+                        if (activity instanceof UseSpotify) {
+                            if (result.getResultCode() == RESULT_CODE_SUCCESSFUL_LOGIN) {
+                                ((UseSpotify) activity).onLeaveSpotifyPage();
+
+                            }
+
+                        }
+
                 }
         );
     }

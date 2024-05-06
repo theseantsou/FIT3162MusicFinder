@@ -114,6 +114,33 @@ public class BackendHelper {
         }
     }
 
+    public static boolean savePlaylistToSpotify(String email, List<Song> songsList, String title) {
+
+        try {
+            JSONArray songsArray = new JSONArray();
+            for (Song song : songsList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("artist", song.getArtist());
+                jsonObject.put("track", song.getTitle());
+                songsArray.put(jsonObject);
+            }
+            String jsonData = "{\"email\" : \"" + email + "\", \"songs\" : "+ songsArray + ", \"title\" : \""+ title + "\"}";
+            String requestURL = baseURL + "/save-playlist";
+
+            HttpURLConnection connection = getPostHttpURLConnection(jsonData, requestURL, 100000);
+
+            JSONObject response = readResponse(connection);
+
+            return response.getString("status").equals("success");
+
+        }
+        catch (Exception ignored) {
+            return false;
+        }
+
+
+    }
+
     public static JSONObject readResponse(HttpURLConnection connection) throws IOException, JSONException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder response = new StringBuilder();

@@ -225,7 +225,6 @@ public abstract class SelectFilter extends AppCompatActivity implements LimitBut
     public void closePage() {
         if (ActivityUtil.isPageNotLoading(loadingAnim)) {
             getUnselectedButtons().forEach(button->ActivityUtil.removeFilter(button.getText().toString()));
-            setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
             finish();
         }
 

@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.musicfinder.pages.SelectMood;
-import com.example.musicfinder.pages.SpotifyWebActivity;
 import com.example.musicfinder.utils.ActivityUtil;
 import com.example.musicfinder.utils.BackendHelper;
 
@@ -59,11 +58,7 @@ public class SpotifyWebView extends WebView {
             System.out.println(redirectedUrl);
             // Check if the redirected URL is starting with the callback URL
             if (redirectedUrl.startsWith(callbackURL)) {
-                // Close the web view activity
-                parentActivity.setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
-                parentActivity.finish();
 
-                // Check if the code exists in the
                 Uri uri = Uri.parse(redirectedUrl);
                 String code = uri.getQueryParameter("code");
                 if (code != null) {
@@ -76,19 +71,21 @@ public class SpotifyWebView extends WebView {
                     thread.start();
                     try {
                         thread.join();
-                        Intent newIntent = new Intent(parentActivity, SelectMood.class);
-                        parentActivity.startActivity(newIntent);
                         Toast.makeText(parentActivity, "Successfully logged in.", Toast.LENGTH_SHORT).show();
+                        parentActivity.setResult(ActivityUtil.RESULT_CODE_SUCCESSFUL_LOGIN);
                     }
                     catch (Exception e) {
                         Toast.makeText(parentActivity, "Authentication error. Please try again.", Toast.LENGTH_SHORT).show();
+                        parentActivity.setResult(ActivityUtil.RESULT_CODE_FAILED_LOGIN);
                     }
 
 
                 } else {
                     Toast.makeText(parentActivity, "Authentication error. Please try again.", Toast.LENGTH_SHORT).show();
+                    parentActivity.setResult(ActivityUtil.RESULT_CODE_FAILED_LOGIN);
                 }
 
+                parentActivity.finish();
                 return true;
 
 

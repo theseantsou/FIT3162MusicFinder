@@ -64,7 +64,6 @@ public class SelectMusicNum extends AppCompatActivity implements LimitButtonClic
     }
 
     public void openParentPage() {
-        setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
         finish();
     }
 

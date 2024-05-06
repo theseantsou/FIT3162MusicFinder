@@ -3,7 +3,7 @@
     <string name="background_image_description">Background Image</string>
     <string name="welcome_string">Welcome to</string>
     <string name="music_finder_description">Simply describe your music preference,and AI will curate a playlist for you</string>
-    <string name="get_started_button_text">Get Started</string>
+    <string name="get_started_button_text">Get Started with Spotify</string>
     <string name="back_button_desc">Back arrow</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
@@ -21,6 +21,10 @@
     <string name="artist_name_example">Artist Name</string>
     <string name="numbering_example">1.</string>
     <string name="pref_file_key">MyPref</string>
+    <string name="save_spotify_button_text">Save on Spotify</string>
+    <string name="regen_playlist_button_text">Regenerate Playlist</string>
+    <string name="favourite_button_text">Favourite</string>
+    <string name="continue_without_spotify_button">Continue without Spotify</string>
 
 
 </resources>

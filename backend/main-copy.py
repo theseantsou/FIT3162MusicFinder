@@ -84,13 +84,13 @@ def callback():
     session['refresh_token'] = token_info['refresh_token']
     session['expires_at'] = datetime.datetime.now().timestamp() + \
         token_info['expires_in']
-
+    print(session)
     return redirect('/populate_playlist')
 
 # Add songs to playlist
 
 
-@app.route('/populate_playlist')
+@app.route('/populate-playlist', methods=["POST"])
 def populate_user_playlist():
 
     # Define access token, if not get it
@@ -129,8 +129,8 @@ def populate_user_playlist():
     user_profile_response = get(
         'https://api.spotify.com/v1/me', headers=headers)
     user_id = user_profile_response.json()['id']
-    create_playlist_response = post(f'https://api.spotify.com/v1/users/{
-                                    user_id}/playlists', headers=headers, json={'name': playlist_name, 'public': False})
+    create_playlist_response = post(
+        f'https: // api.spotify.com/v1/users/{user_id}/playlists', headers=headers, json={'name': playlist_name, 'public': False})
     if create_playlist_response.status_code == 201:
         playlist_id = create_playlist_response.json()['id']
     else:
@@ -141,8 +141,8 @@ def populate_user_playlist():
 
         # Find the URI of the current song, get the uri
         track_search_url = 'https://api.spotify.com/v1/search'
-        search_params = {'q': f'artist:{track["artist"]} track:{
-            track["track"]}', 'type': 'track', 'limit': 1}
+        search_params = {
+            'q': f'artist: {track["artist"]} track: {track["track"]}', 'type': 'track', 'limit': 1}
         track_search_response = get(
             track_search_url, headers=headers, params=search_params)
         tracks_data = track_search_response.json()['tracks']['items']
@@ -159,8 +159,8 @@ def populate_user_playlist():
                 if character == ")":
                     bracket_dash_flag = False
 
-            search_params = {'q': f'artist:{track["artist"]} track:{
-                newstring}', 'type': 'track', 'limit': 1}
+            search_params = {
+                'q': f'artist: {track["artist"]} track: {newstring}', 'type': 'track', 'limit': 1}
             track_search_response = get(
                 track_search_url, headers=headers, params=search_params)
             tracks_data = track_search_response.json()['tracks']['items']
@@ -173,8 +173,8 @@ def populate_user_playlist():
         track_uri = tracks_data[0]['uri']
 
         # Add the song to 'playlist_name' playlist
-        add_track_response = post(f'https://api.spotify.com/v1/playlists/{
-                                  playlist_id}/tracks', headers=headers, json={'uris': [track_uri]})
+        add_track_response = post(
+            f'https: // api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers, json={'uris': [track_uri]})
         print(add_track_response.status_code)
 
     return f'Music added to {playlist_name}'
@@ -182,7 +182,7 @@ def populate_user_playlist():
 # Unused - May have to use for future features -
 
 
-@app.route('/playlists')
+@ app.route('/playlists')
 def get_playlists():
 
     if 'access_token' not in session:
@@ -192,7 +192,7 @@ def get_playlists():
         return redirect('/refresh_token')
 
     headers = {
-        'Authorization': f'Bearer {session['access_token']}'
+        'Authorization': f'Bearer {session["access_token"]}'
     }
 
     response = get(API_BASE_URL + '/v1/me/playlists', headers=headers)
@@ -202,7 +202,7 @@ def get_playlists():
     return jsonify(playlists)
 
 
-@app.route('/refresh_token')
+@ app.route('/refresh_token')
 def refresh_token():
     if 'refresh_token' not in session:
         return redirect('/login')
@@ -226,4 +226,4 @@ def refresh_token():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True, port=8888)

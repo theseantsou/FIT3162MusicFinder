@@ -64,7 +64,7 @@ def request_filter():
     previous_filters = request.json.get("previous_filter")
     previous_response = request.json.get("previous_response")
 
-    prompt = f"Please provide exactly *{filter_amt}* musical {filter_type}"
+    prompt = f"Please provide exactly *{filter_amt + 1}* musical {filter_type}"
 
     if previous_filters:
         previous_filters_str = ", ".join(previous_filters)
@@ -133,18 +133,15 @@ def request_playlist():
     return jsonify(parsed_object)
 
 
-@app.route('/spotify-login', methods=["POST"])
+@app.route("/spotify-login", methods=["POST"])
 def spotify_login():
     email = request.json.get("email")
-    print(email)
     if email:
 
         user = db.session.query(SpotifyUser).filter_by(email=email).first()
 
         if user:
             current_timestamp = datetime.now().timestamp()
-            print(user.expiry_time, current_timestamp)
-            print(user.auth_token)
             if current_timestamp > user.expiry_time:
                 refresh_token(user)
 
@@ -164,11 +161,12 @@ def spotify_login():
 
     # Create auth URL
     auth_url = f"{AUTH_URL}?{urllib.parse.urlencode(auth_params)}"
+
     # Goto auth_url
     return jsonify({"url": auth_url})
 
 
-@app.route('/callback')
+@app.route("/callback")
 def callback():
 
     req_body = None
@@ -246,6 +244,94 @@ def refresh_token(user):
     db.session.commit()
 
 
-@app.route()
+@app.route("/save-playlist", methods=["POST"])
+def save_playlist():
+    email = request.json.get("email")
+    songlist = request.json.get("songs")
+    playlist_title = request.json.get("title")
+    if email:
+        user = db.session.query(SpotifyUser).filter_by(email=email).first()
+
+        if user:
+            access_token = user.auth_token
+
+        else:
+            return jsonify({"status": "error"})
+
+    else:
+        return jsonify({"status": "error"})
+
+    # Required for authorisation
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    # Clean songs of apostrophes
+    for song in songlist:
+
+        newstring = ""
+        for character in song["artist"]:
+            if character != "'":
+                newstring += character
+        song["artist"] = newstring
+
+        newstring = ""
+        for character in song["track"]:
+            if character != "'":
+                newstring += character
+        song["track"] = newstring
+
+    # Create playlist
+    user_profile_response = get(
+        'https://api.spotify.com/v1/me', headers=headers)
+    user_id = user_profile_response.json()['id']
+    create_playlist_response = post(
+        f'https://api.spotify.com/v1/users/{user_id}/playlists', headers=headers, json={'name': playlist_title, 'public': False})
+    if create_playlist_response.status_code == 201:
+        playlist_id = create_playlist_response.json()['id']
+    else:
+        return jsonify({"status": "error"})
+
+    # Iterate over all songs
+    for track in songlist:
+
+        # Find the URI of the current song, get the uri
+        track_search_url = 'https://api.spotify.com/v1/search'
+        search_params = {
+            'q': f'artist: {track["artist"]} track: {track["track"]}', 'type': 'track', 'limit': 1}
+        track_search_response = get(
+            track_search_url, headers=headers, params=search_params)
+        tracks_data = track_search_response.json()['tracks']['items']
+
+        # Clean data further if track is not found
+        if not tracks_data:
+            newstring = ""
+            bracket_dash_flag = False
+            for character in track["track"]:
+                if character == "(" or character == "-":
+                    bracket_dash_flag = True
+                if character != "'" and bracket_dash_flag == False:
+                    newstring += character
+                if character == ")":
+                    bracket_dash_flag = False
+
+            search_params = {
+                'q': f'artist: {track["artist"]} track: {newstring}', 'type': 'track', 'limit': 1}
+            track_search_response = get(
+                track_search_url, headers=headers, params=search_params)
+            tracks_data = track_search_response.json()['tracks']['items']
+
+            # Skip track search if still not found
+            if not tracks_data:
+                continue
+
+        track_uri = tracks_data[0]['uri']
+
+        # Add the song to 'playlist_name' playlist
+        add_track_response = post(
+            f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers, json={'uris': [track_uri]})
+        print(add_track_response.status_code)
+
+    return jsonify({"status": "success"})
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)

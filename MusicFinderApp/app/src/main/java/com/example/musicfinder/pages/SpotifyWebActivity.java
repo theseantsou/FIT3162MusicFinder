@@ -3,6 +3,7 @@ package com.example.musicfinder.pages;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -28,6 +29,17 @@ public class SpotifyWebActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(SpotifyWebActivity.this, "Authentication error. Please try again.", Toast.LENGTH_SHORT).show();
+                setResult(ActivityUtil.RESULT_CODE_FAILED_LOGIN);
+                finish();
+            }
+        });
+
+
         String url = getIntent().getStringExtra("url");
         FrameLayout layout = findViewById(R.id.main);
 
@@ -36,13 +48,7 @@ public class SpotifyWebActivity extends AppCompatActivity {
             webView.loadUrl(url);
 
         layout.addView(webView);
-
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                setResult(ActivityUtil.REQUEST_CODE_SELECT_ARTIST);
-                finish();
-            }
-        });
     }
+
+
 }
