@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 
@@ -78,7 +79,13 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
                 Thread thread = new Thread(() -> {
                     String email = ActivityUtil.getEmailFromSharedPref(this);
                     String url = BackendHelper.getSpotifyLoginURL(email);
-                    if (url != null && !url.equals("null")) {
+                    if (url == null) {
+                        runOnUiThread(() -> Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show());
+
+                        isButtonClickable = true;
+                        return;
+                    }
+                    if (!url.equals("null")) {
                         runOnUiThread(() -> {
                             Intent intent = new Intent(this, SpotifyWebActivity.class);
                             intent.putExtra("url", url);

@@ -78,7 +78,10 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
         saveToSpotifyButton.setOnClickListener(v -> addPlaylistToSpotify());
 
         AppCompatButton regenButton = findViewById(R.id.regenerateButton);
-
+        regenButton.setOnClickListener(v -> {
+            adapter.setSongs(new ArrayList<>());
+            generatePlaylist(generatedPlaylist.getSongs().size(), generatedPlaylist.getFilters());
+        });
     }
 
     private void generatePlaylist(int numberOfSongs, List<String> filters) {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicFinder</string>
+    <string name="app_name">BeatBlendr</string>
     <string name="background_image_description">Background Image</string>
     <string name="welcome_string">Welcome to</string>
     <string name="music_finder_description">Simply describe your music preference,and AI will curate a playlist for you</string>
