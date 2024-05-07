@@ -1,6 +1,7 @@
 package com.example.musicfinder.pages;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -24,9 +25,12 @@ import com.example.musicfinder.R;
 import com.example.musicfinder.Song;
 import com.example.musicfinder.SongAdapter;
 import com.example.musicfinder.UseSpotify;
+import com.example.musicfinder.database.DatabaseHelper;
+import com.example.musicfinder.database.contracts.HistoryContract;
 import com.example.musicfinder.utils.ActivityUtil;
 import com.example.musicfinder.utils.BackendHelper;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,8 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
     private TextView noInternetTextView;
     private ActivityResultLauncher<Intent> launcher;
     private Playlist generatedPlaylist;
+
+    private DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,18 +76,26 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
             }
         });
 
-        launcher = ActivityUtil.getResultLauncher(this);
-
-        generatePlaylist(ActivityUtil.getAmountOfSongs(), ActivityUtil.getFilters());
-
         AppCompatButton saveToSpotifyButton = findViewById(R.id.saveSpotifyButton);
         saveToSpotifyButton.setOnClickListener(v -> addPlaylistToSpotify());
 
         AppCompatButton regenButton = findViewById(R.id.regenerateButton);
         regenButton.setOnClickListener(v -> {
             adapter.setSongs(new ArrayList<>());
+            recyclerView.setAdapter(adapter);
             generatePlaylist(generatedPlaylist.getSongs().size(), generatedPlaylist.getFilters());
         });
+
+        db = new DatabaseHelper(this);
+
+        launcher = ActivityUtil.getResultLauncher(this);
+
+        generatePlaylist(ActivityUtil.getAmountOfSongs(), ActivityUtil.getFilters());
+
+        AppCompatButton favButton = findViewById(R.id.FavoriteButton);
+        favButton.setOnClickListener(v->getPlaylist());
+
+
     }
 
     private void generatePlaylist(int numberOfSongs, List<String> filters) {
@@ -109,13 +123,27 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
                 }
             });
 
-            // TODO: Add to history table
+            // Add playlist to history table
+            new Thread(() -> db.addPlaylistToTable(HistoryContract.HistoryEntry.TABLE_NAME, generatedPlaylist)).start();
+
+
 
         }).start();
     }
 
+    private void getPlaylist() {
+
+        List<Playlist> playlists = db.getAllPlaylistsFromTable(HistoryContract.HistoryEntry.TABLE_NAME);
+        for(Playlist playlist : playlists) {
+
+        }
+
+
+    }
+
     private void openHomePage() {
         if (ActivityUtil.isPageNotLoading(loadingAnim)) {
+            db.close();
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -147,6 +175,8 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
     @Override
     public void onLeaveSpotifyPage() {
         isButtonClickable = false;
+        runOnUiThread(() -> Toast.makeText(this, "Adding Playlist to Spotify", Toast.LENGTH_SHORT).show());
+
         String email = ActivityUtil.getEmailFromSharedPref(this);
         List<Song> songsList = generatedPlaylist.getSongs();
         String title = generatedPlaylist.getTitle();

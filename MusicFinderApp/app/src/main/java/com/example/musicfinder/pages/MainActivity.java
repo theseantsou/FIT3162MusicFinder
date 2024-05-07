@@ -4,6 +4,8 @@ package com.example.musicfinder.pages;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
 
     private boolean isButtonClickable;
     private ActivityResultLauncher<Intent> launcher;
+
+    private ProgressBar progressBarLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
         noSpotifyTextView.setPaintFlags(noSpotifyTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         noSpotifyTextView.setOnClickListener(v -> openNextPage(false));
+        progressBarLogin = findViewById(R.id.progressBarLoginSpotify);
     }
 
     /**
@@ -74,11 +79,12 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
     public void openNextPage(boolean requireSpotify) {
         if (isButtonClickable) {
             isButtonClickable = false; // Disable button
-
+            progressBarLogin.setVisibility(View.VISIBLE);
             if (requireSpotify) {
                 Thread thread = new Thread(() -> {
                     String email = ActivityUtil.getEmailFromSharedPref(this);
                     String url = BackendHelper.getSpotifyLoginURL(email);
+                    progressBarLogin.setVisibility(View.INVISIBLE);
                     if (url == null) {
                         runOnUiThread(() -> Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show());
 
@@ -103,12 +109,6 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
                 Intent intent = new Intent(this, SelectMood.class);
                 launcher.launch(intent);
             }
-
-
-
-
-
-
 
         }
     }

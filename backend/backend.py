@@ -106,7 +106,7 @@ def request_playlist():
 
     prompt = "Give me a playlist of only *exactly* *" + \
         str(song_amt) + "* songs" + filters_str
-
+    print(prompt)
     instruction = (
         "Generate a JSON-formatted response with the following format: \n"
         "{\n"
@@ -118,7 +118,7 @@ def request_playlist():
         '  ]\n'
         "}\n"
         "Ensure that the response contains only the JSON-formatted playlist, without additional text. Please provide the artist and track details for each song.\n"
-        "Come up with a creative playlist title and replace it with the playlist_title and keep the '- Generated using BeatBlendr' behind the title\n"
+        "Come up with a playlist title that involves the songs and artists in the playlist and replace it with the playlist_title and keep the '- Generated using BeatBlendr' behind the title\n"
         "Ensure that there are no duplicate songs in the playlist.\n"
         "Exclude the provided filters from the response to diversify the playlist.\n"
         "Randomize the order of songs in the playlist for each request.\n"
