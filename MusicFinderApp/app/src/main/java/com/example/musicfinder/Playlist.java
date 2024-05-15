@@ -15,6 +15,7 @@ public class Playlist {
     public Playlist() {
 
     }
+
     public List<Song> getSongs() {
         return this.songs;
     }
@@ -30,6 +31,7 @@ public class Playlist {
     public void setFilters(List<String> filters) {
         this.filters = filters;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -45,6 +47,7 @@ public class Playlist {
     public void setPlaylistID(long playlistID) {
         this.playlistID = playlistID;
     }
+
     public void addSongToPlaylist(Song song) {
         this.songs.add(song);
     }
@@ -52,9 +55,8 @@ public class Playlist {
     @NonNull
     @Override
     public String toString() {
-
         StringBuilder output = new StringBuilder("Playlist (\n");
-        for (Song song: this.songs) {
+        for (Song song : this.songs) {
             output.append(song.toString()).append("\n");
         }
         output.append(")\nFilters (\n");
@@ -64,5 +66,4 @@ public class Playlist {
         output.append(")");
         return output.toString();
     }
-
 }
