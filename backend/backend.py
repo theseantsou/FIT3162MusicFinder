@@ -64,7 +64,7 @@ def request_filter():
     previous_filters = request.json.get("previous_filter")
     previous_response = request.json.get("previous_response")
 
-    prompt = f"Please provide exactly *{filter_amt + 1}* musical {filter_type}"
+    prompt = f"Please provide exactly *{filter_amt + 2}* musical {filter_type}"
 
     if previous_filters:
         previous_filters_str = ", ".join(previous_filters)
