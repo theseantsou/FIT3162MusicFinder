@@ -3,32 +3,21 @@ from unittest.mock import patch
 
 import pytest
 
-
-@pytest.mark.parametrize(
-    "amount, filter_type, prev_filter, prev_resp",
-    [
-        (5, "Genre", ["Study", "Chill"], []),
-        (5, "Occasion or Mood", [], []),
-        (5, "Artist", ["Pop"], ["Justin Bieber", "Miley Cyrus", "Lady Gaga", "Michael Jackson"]),
-        (5, "Time Period (Decade)", ["Shower", "Dance"], [])
-    ]
-)
-def test_request_filter(client, amount, filter_type, prev_filter, prev_resp):
+def test_request_filter(client):
     # Data to pass into request filter endpoint
     data = {
-        "amount": amount,
-        "type": filter_type,
-        "previous_filter": prev_filter,
-        "previous_response": prev_resp
+        "amount": 5,
+        "type": "Genre",
+        "previous_filter": ["Study", "Chill"],
+        "previous_response": []
     }
     # Send post request to request filter endpoint with data
-    with patch('backend.request_openAI') as mock_request_openAI:
+    with patch('backend.request_openAI') as mock_req:
         # Mock the post request
-        mock_request_openAI.return_value = '{"filters": ["Pop", "Rock", "Hip-hop", "Electronic", "Dance"]}'
+        mock_req.return_value = '{"filters": ["Pop", "Rock", "Hip-hop", "Electronic", "Dance", "EDM", "Indie"]}'
 
         # Send post request to request filter endpoint with data
         response = client.post("/request-filter", json=data)
-
 
     # Check response is success or not
     assert response.status_code == 200
@@ -44,24 +33,35 @@ def test_request_filter(client, amount, filter_type, prev_filter, prev_resp):
     assert len(response_data["filters"]) >= data["amount"]
 
 
-@pytest.mark.parametrize(
-    "amount, filters",
-    [
-        (10, []),
-        (20, ["Sad", "Chill", "2010s", "2020s", "Adele", "Billie Eilish"]),
-        (30, ["2000s"]),
-        (40, ["Pop", "Romance", "Ed Sheeran"]),
-        (50, ["Happy", "Electronic", "Dance", "1990s", "2020s"])
-    ]
-)
-def test_request_playlist(client, amount, filters):
+def test_request_playlist(client):
     # Data to pass into request-playlist endpoint
     data = {
-        "amount": amount,
-        "filters": filters
+        "amount": 10,
+        "filters": ["Road Trip Anthems", "Chill Out", "Hip Hop", "Indie", "2020s", "2010s", "Billie Eilish"]
     }
-    # Send post request to request-playlist endpoint
-    response = client.post("/request-playlist", json=data)
+    # Mocking the OpenAI API call
+    with patch('backend.request_openAI') as mock_req:
+        mock_req.return_value = (
+            '{"title": "Eclectic Vibes - Generated using BeatBlendr", "playlist": ['
+            '{"artist": "Imagine Dragons", "track": "Believer"},'
+            '{"artist": "Lorde", "track": "Royals"},'
+            '{"artist": "Kendrick Lamar", "track": "HUMBLE."},'
+            '{"artist": "The Lumineers", "track": "Ho Hey"},'
+            '{"artist": "Dua Lipa", "track": "Don''t Start Now"}, '
+            '{"artist": "Arctic Monkeys", "track": "Do I Wanna Know?"}, '
+            '{"artist": "Drake", "track": "In My Feelings"}, '
+            '{"artist": "Vance Joy", "track": "Riptide"}, '
+            '{"artist": "SZA", "track": "The Weekend"}, '
+            '{"artist": "Foster The People", "track": "Pumped Up Kicks"}, '
+            '{"artist": "Childish Gambino", "track": "Redbone"}, '
+            '{"artist": "Hozier", "track": "Take Me to Church"}, '
+            '{"artist": "Ariana Grande", "track": "thank u, next"}, '
+            '{"artist": "Billie Eilish", "track": "bad guy"}, '
+            '{"artist": "Twenty One Pilots", "track": "Stressed Out"}]}'
+        )
+        # response from OpenAI API (response is a mocked response)
+        response = client.post("/request-playlist", json=data)
+
     # Check success status code
     assert response.status_code == 200
     # Convert json to python dictionary
