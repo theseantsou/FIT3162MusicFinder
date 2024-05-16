@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BackendHelper {
-    public static final String baseURL = "http://192.168.0.69:5000";
+    public static final String baseURL = "http://192.168.43.189:5000";
 
     public static List<String> requestFilters(int filterAmt, String filterType, List<String> previousFilter, List<String> previousResponse) {
         try {
@@ -137,6 +137,26 @@ public class BackendHelper {
         catch (Exception ignored) {
             return false;
         }
+
+
+    }
+
+    public static String getSongsPreview(String email, Song song) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("artist", song.getArtist());
+            jsonObject.put("track", song.getTitle());
+            String jsonData = "{\"email\": \"" + email + "\", \"song\": " + jsonObject + "}";
+            String requestURL = baseURL + "/get-preview-mp3";
+
+            HttpURLConnection connection = getPostHttpURLConnection(jsonData, requestURL, 5000);
+            JSONObject response = readResponse(connection);
+            return response.getString("preview_url");
+        }
+        catch (Exception e) {
+            return null;
+        }
+
 
 
     }

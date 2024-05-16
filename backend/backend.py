@@ -243,7 +243,6 @@ def refresh_token(user):
         new_token_info['expires_in']
     db.session.commit()
 
-
 @app.route("/save-playlist", methods=["POST"])
 def save_playlist():
     email = request.json.get("email")
@@ -266,18 +265,8 @@ def save_playlist():
 
     # Clean songs of apostrophes
     for song in songlist:
-
-        newstring = ""
-        for character in song["artist"]:
-            if character != "'":
-                newstring += character
-        song["artist"] = newstring
-
-        newstring = ""
-        for character in song["track"]:
-            if character != "'":
-                newstring += character
-        song["track"] = newstring
+        song["artist"] = song["artist"].replace("'", "")
+        song["track"] = song["track"].replace("'", "")
 
     # Create playlist
     user_profile_response = get(
@@ -291,12 +280,12 @@ def save_playlist():
         return jsonify({"status": "error"})
 
     # Iterate over all songs
-    for track in songlist:
+    for song in songlist:
 
         # Find the URI of the current song, get the uri
         track_search_url = 'https://api.spotify.com/v1/search'
         search_params = {
-            'q': f'artist: {track["artist"]} track: {track["track"]}', 'type': 'track', 'limit': 1}
+            'q': f'artist: {song["artist"]} track: {song["track"]}', 'type': 'track', 'limit': 1}
         track_search_response = get(
             track_search_url, headers=headers, params=search_params)
         tracks_data = track_search_response.json()['tracks']['items']
@@ -305,7 +294,7 @@ def save_playlist():
         if not tracks_data:
             newstring = ""
             bracket_dash_flag = False
-            for character in track["track"]:
+            for character in song["track"]:
                 if character == "(" or character == "-":
                     bracket_dash_flag = True
                 if character != "'" and bracket_dash_flag == False:
@@ -314,7 +303,7 @@ def save_playlist():
                     bracket_dash_flag = False
 
             search_params = {
-                'q': f'artist: {track["artist"]} track: {newstring}', 'type': 'track', 'limit': 1}
+                'q': f'artist: {song["artist"]} track: {newstring}', 'type': 'track', 'limit': 1}
             track_search_response = get(
                 track_search_url, headers=headers, params=search_params)
             tracks_data = track_search_response.json()['tracks']['items']
@@ -331,6 +320,58 @@ def save_playlist():
         print(add_track_response.status_code)
 
     return jsonify({"status": "success"})
+
+@app.route("/get-preview-mp3", methods=["POST"])
+def get_preview_mp3():
+    email = request.json.get("email")
+    song = request.json.get("song")
+
+    if email:
+        user = db.session.query(SpotifyUser).filter_by(email=email).first()
+
+        if user:
+            access_token = user.auth_token
+
+        else:
+            return jsonify({"status": "error"})
+
+    else:
+        return jsonify({"status": "error"})
+
+    # Required for authorisation
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    song["artist"] = song["artist"].replace("'", "")
+    song["track"] = song["track"].replace("'", "")
+    
+    newstring = ""
+    bracket_dash_flag = False
+    for character in song["track"]:
+        if character == "(" or character == "-":
+            bracket_dash_flag = True
+        if character != "'" and bracket_dash_flag == False:
+            newstring += character
+        if character == ")":
+            bracket_dash_flag = False
+
+    search_params = {
+                'q': f'artist: {song["artist"]} track: {newstring}', 'type': 'track', 'limit': 1}
+    
+    track_search_url = 'https://api.spotify.com/v1/search'
+
+    track_search_response = get(
+                track_search_url, headers=headers, params=search_params)
+    
+    
+    tracks_data = track_search_response.json()['tracks']['items']
+
+    if not tracks_data:
+        return jsonify({"preview_url": None})
+
+
+    preview_url = tracks_data[0]["preview_url"]
+    
+    return jsonify({"preview_url": preview_url})
 
 
 if __name__ == "__main__":

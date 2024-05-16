@@ -66,6 +66,8 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
         adapter = new SongAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
+        adapter.setParentActivity(this);
+
 
         loadingAnim = findViewById(R.id.progressBarGenPlaylist);
         noInternetTextView = findViewById(R.id.textViewNoInternet);
@@ -104,6 +106,7 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
         new Thread(() -> {
             generatedPlaylist = BackendHelper.requestPlaylist(numberOfSongs, filters);
             List<Song> songsArray;
+
             if (generatedPlaylist != null) {
                  songsArray = generatedPlaylist.getSongs();
             } else {
@@ -124,7 +127,7 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
             });
 
             // Add playlist to history table
-            new Thread(() -> db.addPlaylistToTable(HistoryContract.HistoryEntry.TABLE_NAME, generatedPlaylist)).start();
+            //new Thread(() -> db.addPlaylistToTable(HistoryContract.HistoryEntry.TABLE_NAME, generatedPlaylist)).start();
 
 
 
@@ -142,12 +145,12 @@ public class GeneratePlaylist extends AppCompatActivity implements LimitButtonCl
     }
 
     private void openHomePage() {
-        if (ActivityUtil.isPageNotLoading(loadingAnim)) {
-            db.close();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+
+        db.close();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
 
     }
 

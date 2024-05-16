@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements LimitButtonClickO
                 thread.start();
             }
             else {
+                progressBarLogin.setVisibility(View.INVISIBLE);
                 Intent intent = new Intent(this, SelectMood.class);
                 launcher.launch(intent);
             }
